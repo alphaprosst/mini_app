@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>عالم الاستثمار</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- شاشة الترحيب -->
+  <div id="splash">
+    <img src="logo.png" alt="شعار الجمل" class="logo" />
+  </div>
+
+  <!-- الصفحة الرئيسية -->
+  <div id="app" style="display:none">
+    <header>
+      <img src="logo.png" alt="الشعار" class="app-logo" />
+    </header>
+
+    <main>
+      <div class="cards">
+        <div class="card">
+          <img src="box.png" alt="صندوق">
+          <h2>BBTC</h2>
+          <p>40% شهرياً <span class="up">▲</span></p>
+        </div>
+        <div class="card">
+          <img src="box.png" alt="صندوق">
+          <h2>MVC</h2>
+          <p>60% شهرياً <span class="up">▲</span></p>
+        </div>
+        <div class="card">
+          <img src="box.png" alt="صندوق">
+          <h2>VPI</h2>
+          <p>100% شهرياً <span class="up">▲</span></p>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <button>الصناديق</button>
+      <button>المهمات</button>
+      <button>الإحالات</button>
+      <button>المحفظة</button>
+    </footer>
+  </div>
+
+  <script>
+    setTimeout(() => {
+      document.getElementById("splash").style.display = "none";
+      document.getElementById("app").style.display = "block";
+    }, 2000);
+  </script>
+</body>
+</html>
