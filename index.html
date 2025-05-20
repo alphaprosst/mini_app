@@ -1,51 +1,159 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>عالم الاستثمار</title>
-    <style>
-      body {
-        margin: 0;
-        font-family: sans-serif;
-        background-color: #ffffff;
-        color: #111;
-      }
-      .splash {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #19a463;
-        height: 100vh;
-        animation: fadeOut 1.5s forwards 2s;
-        position: fixed;
-        width: 100%;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-      }
-      .splash img {
-        width: 100px;
-        height: 100px;
-      }
-      @keyframes fadeOut {
-        to {
-          opacity: 0;
-          visibility: hidden;
-        }
-      }
-      .app {
-        padding: 20px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="splash" id="splash">
-      <img src="logo.png" alt="logo" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>عالم الاستثمار</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #222;
+    }
+
+    /* شاشة البداية */
+    #splash {
+      position: fixed;
+      background-color: #2ecc71;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #splash img {
+      width: 100px;
+      height: 100px;
+    }
+
+    /* الشعار فوق */
+    #header {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px;
+    }
+
+    #header img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card img {
+      width: 40px;
+      height: 40px;
+      margin-left: 10px;
+    }
+
+    .card .info {
+      flex-grow: 1;
+    }
+
+    .percentage {
+      color: green;
+      font-weight: bold;
+    }
+
+    .menu {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #2ecc71;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      color: white;
+    }
+
+    .menu div {
+      text-align: center;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- شاشة البداية -->
+  <div id="splash">
+    <img src="logo.png" alt="logo" />
+  </div>
+
+  <!-- الشعار -->
+  <div id="header">
+    <img src="logo.png" alt="logo" />
+  </div>
+
+  <div class="container">
+    <div class="title">أهلاً بك في عالم الاستثمار الآمن</div>
+
+    <div class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/2089/2089643.png" alt="box" />
+      <div class="info">
+        <div><strong>BBTC</strong></div>
+        <div class="percentage">40% شهرياً ↑</div>
+      </div>
     </div>
-    <div class="app">
-      <h1>أهلاً بك في عالم الاستثمار الآمن</h1>
-      <p>واجهة تجريبية حالياً</p>
+
+    <div class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/2089/2089643.png" alt="box" />
+      <div class="info">
+        <div><strong>MVC</strong></div>
+        <div class="percentage">60% شهرياً ↑</div>
+      </div>
     </div>
-  </body>
+
+    <div class="card">
+      <img src="https://cdn-icons-png.flaticon.com/512/2089/2089643.png" alt="box" />
+      <div class="info">
+        <div><strong>VPI</strong></div>
+        <div class="percentage">100% شهرياً ↑</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- قائمة الأزرار -->
+  <div class="menu">
+    <div>الصناديق</div>
+    <div>المهمات</div>
+    <div>الإحالات</div>
+    <div>المحفظة</div>
+  </div>
+
+  <!-- سكربت إخفاء شاشة البداية -->
+  <script>
+    setTimeout(() => {
+      document.getElementById("splash").style.display = "none";
+    }, 2000);
+  </script>
+
+</body>
 </html>
