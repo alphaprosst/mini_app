@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,151 +8,125 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: sans-serif;
-    }
+      font-family: Arial, sans-serif;
+    }body {
+  background-color: #f5f5f5;
+  color: #111;
+}
 
-    body {
-      background-color: #ffffff;
-      color: #222;
-    }
+.splash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0f5132;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-    /* شاشة البداية */
-    #splash {
-      position: fixed;
-      background-color: #2ecc71;
-      width: 100%;
-      height: 100%;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+.splash img {
+  width: 100px;
+  height: 100px;
+}
 
-    #splash img {
-      width: 100px;
-      height: 100px;
-    }
+.header {
+  background-color: #ffffff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
 
-    /* الشعار فوق */
-    #header {
-      display: flex;
-      justify-content: flex-end;
-      padding: 10px;
-    }
+.header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
 
-    #header img {
-      width: 40px;
-      height: 40px;
-    }
+.container {
+  padding: 20px;
+}
 
-    .container {
-      padding: 20px;
-    }
+.fund-card {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+}
 
-    .title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
+.fund-title {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    .card {
-      background-color: #f9f9f9;
-      border: 1px solid #ddd;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+.fund-icon {
+  margin-left: 10px;
+  font-size: 20px;
+}
 
-    .card img {
-      width: 40px;
-      height: 40px;
-      margin-left: 10px;
-    }
+.fund-profit {
+  color: green;
+  font-size: 14px;
+  margin-top: 5px;
+}
 
-    .card .info {
-      flex-grow: 1;
-    }
+.navbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #0f5132;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  color: #fff;
+}
 
-    .percentage {
-      color: green;
-      font-weight: bold;
-    }
+.navbar div {
+  text-align: center;
+  font-size: 12px;
+}
 
-    .menu {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background-color: #2ecc71;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      color: white;
-    }
-
-    .menu div {
-      text-align: center;
-      font-size: 14px;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
-
-  <!-- شاشة البداية -->
-  <div id="splash">
+  <div class="splash" id="splash">
     <img src="logo.png" alt="logo" />
-  </div>
-
-  <!-- الشعار -->
-  <div id="header">
+  </div>  <div class="header">
     <img src="logo.png" alt="logo" />
-  </div>
-
-  <div class="container">
-    <div class="title">أهلاً بك في عالم الاستثمار الآمن</div>
-
-    <div class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/2089/2089643.png" alt="box" />
-      <div class="info">
-        <div><strong>BBTC</strong></div>
-        <div class="percentage">40% شهرياً ↑</div>
+  </div>  <div class="container">
+    <div class="fund-card">
+      <div class="fund-title">
+        <span><span class="fund-icon">📦</span> BBTC</span>
+        <span class="fund-profit">+40%</span>
       </div>
     </div>
-
-    <div class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/2089/2089643.png" alt="box" />
-      <div class="info">
-        <div><strong>MVC</strong></div>
-        <div class="percentage">60% شهرياً ↑</div>
+    <div class="fund-card">
+      <div class="fund-title">
+        <span><span class="fund-icon">📦</span> BETH</span>
+        <span class="fund-profit">+32%</span>
       </div>
     </div>
-
-    <div class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/2089/2089643.png" alt="box" />
-      <div class="info">
-        <div><strong>VPI</strong></div>
-        <div class="percentage">100% شهرياً ↑</div>
+    <div class="fund-card">
+      <div class="fund-title">
+        <span><span class="fund-icon">📦</span> BUSDT</span>
+        <span class="fund-profit">+25%</span>
       </div>
     </div>
-  </div>
-
-  <!-- قائمة الأزرار -->
-  <div class="menu">
+  </div>  <div class="navbar">
     <div>الصناديق</div>
     <div>المهمات</div>
     <div>الإحالات</div>
     <div>المحفظة</div>
-  </div>
-
-  <!-- سكربت إخفاء شاشة البداية -->
-  <script>
+  </div>  <script>
     setTimeout(() => {
-      document.getElementById("splash").style.display = "none";
+      document.getElementById('splash').style.display = 'none';
     }, 2000);
-  </script>
-
-</body>
+  </script></body>
 </html>
