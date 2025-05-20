@@ -1,192 +1,148 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>الجمل</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: sans-serif;
-      }body {
-    background-color: #ffffff;
-    color: #000;
-  }
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>الجمل</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #00C569;
+    }
 
-  /* شاشة التحميل */
-  #splash {
-    position: fixed;
-    width: 100%;
-    height: 100vh;
-    background-color: #b9fbc0; /* أخضر فاتح */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
+    /* شاشة البداية */
+    .splash {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #00C569;
+    }
 
-  #splash img {
-    width: 150px;
-    height: 150px;
-  }
+    /* الشاشة الرئيسية */
+    .main {
+      display: none;
+      padding: 20px;
+      background-color: #ffffff;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px;
-  }
+    /* الشعار */
+    .logo-container {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 20px;
+    }
 
-  .header img {
-    width: 40px;
-    height: 40px;
-  }
+    .logo-container img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
 
-  .title {
-    font-size: 24px;
-    font-weight: bold;
-  }
+    /* الصناديق */
+    .fund {
+      background-color: #f8f8f8;
+      margin: 15px 0;
+      padding: 15px 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s ease;
+    }
 
-  .boxes {
-    padding: 16px;
-  }
+    .fund:hover {
+      transform: scale(1.02);
+    }
 
-  .box {
-    background-color: #f1f1f1;
-    padding: 16px;
-    margin-bottom: 16px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+    .fund-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
 
-  .box img {
-    width: 32px;
-    height: 32px;
-  }
+    .growth {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      color: green;
+      font-weight: bold;
+    }
 
-  .box .details {
-    flex-grow: 1;
-    margin-right: 12px;
-  }
+    .growth::before {
+      content: '↑';
+      margin-left: 5px;
+      font-size: 20px;
+    }
 
-  .box .details h3 {
-    margin-bottom: 8px;
-  }
+    /* القائمة السفلية */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #ffffff;
+      border-top: 1px solid #ccc;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
 
-  .box .details span {
-    font-size: 16px;
-    color: green;
-    font-weight: bold;
-  }
+    .bottom-nav div {
+      color: #006C3F;
+      font-weight: bold;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <!-- شاشة البداية -->
+  <div class="splash" id="splash">
+    <img src="logo.png" alt="logo" width="120" />
+  </div>
 
-  /* شريط التنقل */
-  .navbar {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #ffffff;
-    border-top: 1px solid #ccc;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-  }
-
-  .navbar button {
-    background: none;
-    border: none;
-    color: #2d6a4f;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-  }
-
-  .section {
-    display: none;
-    padding: 16px;
-  }
-
-  .section.active {
-    display: block;
-  }
-</style>
-
-  </head>
-  <body>
-    <div id="splash">
+  <!-- الشاشة الرئيسية -->
+  <div class="main" id="main">
+    <div class="logo-container">
       <img src="logo.png" alt="logo" />
-    </div><div class="header">
-  <img src="logo.png" alt="logo" />
-  <div class="title">الجمل للاستثمار</div>
-</div>
-
-<div id="funds" class="section active">
-  <div class="boxes">
-    <div class="box">
-      <img src="https://cdn-icons-png.flaticon.com/512/109/109602.png" alt="up" />
-      <div class="details">
-        <h3>BBTC</h3>
-        <span>40% &#8593;</span>
-      </div>
     </div>
 
-    <div class="box">
-      <img src="https://cdn-icons-png.flaticon.com/512/109/109602.png" alt="up" />
-      <div class="details">
-        <h3>CFUND</h3>
-        <span>60% &#8593;</span>
+    <!-- الصناديق -->
+    <div class="funds">
+      <div class="fund">
+        <div class="fund-name">BBTC</div>
+        <div class="growth">40%</div>
       </div>
-    </div>
 
-    <div class="box">
-      <img src="https://cdn-icons-png.flaticon.com/512/109/109602.png" alt="up" />
-      <div class="details">
-        <h3>GPOOL</h3>
-        <span>100% &#8593;</span>
+      <div class="fund">
+        <div class="fund-name">CFUND</div>
+        <div class="growth">60%</div>
+      </div>
+
+      <div class="fund">
+        <div class="fund-name">GPOOL</div>
+        <div class="growth">100%</div>
       </div>
     </div>
   </div>
-</div>
 
-<div id="tasks" class="section">
-  <h2>المهمات</h2>
-  <p>سيتم إضافة مهمات لاحقاً.</p>
-</div>
+  <!-- الشريط السفلي -->
+  <div class="bottom-nav">
+    <div>الصناديق</div>
+    <div>مهام</div>
+    <div>الإحالات</div>
+    <div>المحفظة</div>
+  </div>
 
-<div id="referrals" class="section">
-  <h2>الإحالات</h2>
-  <p>عدد الإحالات الخاصة بك: 0</p>
-</div>
-
-<div id="wallet" class="section">
-  <h2>المحفظة</h2>
-  <p>أرباحك: $0.00</p>
-</div>
-
-<div class="navbar">
-  <button onclick="showSection('funds')">الصناديق</button>
-  <button onclick="showSection('tasks')">مهمات</button>
-  <button onclick="showSection('referrals')">الإحالات</button>
-  <button onclick="showSection('wallet')">المحفظة</button>
-</div>
-
-<script>
-  // شاشة التحميل
-  window.addEventListener("load", function () {
+  <script>
     setTimeout(() => {
-      document.getElementById("splash").style.display = "none";
-    }, 2000);
-  });
-
-  function showSection(id) {
-    document.querySelectorAll(".section").forEach((el) => {
-      el.classList.remove("active");
-    });
-    document.getElementById(id).classList.add("active");
-  }
-</script>
-
-  </body>
+      document.getElementById('splash').style.display = 'none';
+      document.getElementById('main').style.display = 'block';
+    }, 1500);
+  </script>
+</body>
 </html>
