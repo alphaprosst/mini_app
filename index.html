@@ -97,6 +97,12 @@
       margin-left: 6px;
       font-size: 20px;
     }
+    .fund-desc {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
     .invest-btn {
       margin-top: 10px;
       background-color: #00C569;
@@ -235,25 +241,36 @@
       <div class="container">
         <!-- صندوق BBTC -->
         <div class="fund">
-          <div>
+          <div class="fund-header">
             <div class="fund-name">BBTC</div>
             <div class="fund-growth">40%</div>
           </div>
+          <div class="fund-desc">
+            تستثمر أموال هذا الصندوق في الأصول الآمنة: البيتكوين والأسهم الأميركية. نسبة المخاطرة 1%، وأرباح ثابتة 40% على رأس المال المستثمر شهرياً.
+          </div>
           <button class="invest-btn" onclick="openModal('BBTC', 1000)">استثمار</button>
         </div>
+
         <!-- صندوق CFUND -->
         <div class="fund">
-          <div>
+          <div class="fund-header">
             <div class="fund-name">CFUND</div>
             <div class="fund-growth">60%</div>
           </div>
+          <div class="fund-desc">
+            تستثمر أموال هذا الصندوق في مجال العملات الرقمية، المشاريع الواعدة (RWA + AI)، واكتتابات نخوضها بمقاعد حيتان، مع خاصية الاسترجاع في حال فشل الاكتتاب لحماية أموال المستثمرين.
+          </div>
           <button class="invest-btn" onclick="openModal('CFUND', 500)">استثمار</button>
         </div>
+
         <!-- صندوق GPOOL -->
         <div class="fund">
-          <div>
+          <div class="fund-header">
             <div class="fund-name">GPOOL</div>
             <div class="fund-growth">100%</div>
+          </div>
+          <div class="fund-desc">
+            يتمتع مستثمرو هذا الصندوق بخليط من الاستثمارات القوية لتحقيق أرباح عالية شهرياً. يستثمر في العملات الرقمية، الاكتتابات المبكرة، عملات الميم، والعقود الآجلة. نسبة الخسارة المتوقعة في أسوأ الحالات لا تتجاوز 5%.
           </div>
           <button class="invest-btn" onclick="openModal('GPOOL', 500)">استثمار</button>
         </div>
@@ -306,7 +323,7 @@
   <!-- جافاسكربت لتشغيل الأقسام والـ Modal -->
   <script>
     // رابط محفظتك على Tonkeeper (استبدله بالرابط الحقيقي)
-    const TONKEEPER_ADDRESS = "ton://transfer/UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG?amount=";
+    const TONKEEPER_ADDRESS = "ton://transfer/YourTonkeeperAddress?amount=";
     // مثال رابط دفع USDT (استبدله حسب وسيط الدفع الحقيقي)
     const USDT_WALLET_ADDRESS = "https://your-usdt-wallet.com/transfer?amount=";
 
