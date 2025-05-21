@@ -118,7 +118,7 @@
       background-color: #0ba158;
     }
 
-    /* -------------- صندوق إدخال المبلغ (Modal بسيط مدمج) -------------- */
+    /* -------------- صندوق إدخال المبلغ (Modal + خيارات الدفع) -------------- */
     .modal {
       display: none;
       position: fixed;
@@ -143,7 +143,34 @@
       font-size: 20px;
       color: #333;
     }
-    .modal-content input {
+    .payment-options {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 16px;
+    }
+    .payment-option {
+      background-color: #F8F8F8;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .payment-option:hover {
+      background-color: #eee;
+    }
+    .payment-option span {
+      font-weight: bold;
+      color: #006C3F;
+    }
+    .amount-input {
+      display: none;
+      flex-direction: column;
+    }
+    .amount-input input {
       width: 100%;
       padding: 10px;
       font-size: 16px;
@@ -151,19 +178,7 @@
       border-radius: 6px;
       margin-bottom: 16px;
     }
-    .modal-content .wallet-select {
-      margin-bottom: 16px;
-      font-size: 16px;
-      color: #333;
-    }
-    .modal-content .wallet-select select {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .modal-content .buy-now {
+    .amount-input .buy-now {
       background-color: #00C569;
       color: #fff;
       border: none;
@@ -174,7 +189,7 @@
       cursor: pointer;
       transition: background-color 0.2s ease;
     }
-    .modal-content .buy-now:hover {
+    .amount-input .buy-now:hover {
       background-color: #0ba158;
     }
 
@@ -202,6 +217,15 @@
       font-weight: bold;
     }
 
+    /* -------------- صورة الجمل -------------- */
+    .camel-image {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 80px;
+      height: 80px;
+    }
+
     /* -------------- الأقسام المخفية (Tabs) -------------- */
     .section {
       display: none;
@@ -223,6 +247,9 @@
   </style>
 </head>
 <body>
+
+  <!-- صورة الجمل -->
+  <img class="camel-image" src="logo.png" alt="جمل للاستثمار" />
 
   <!-- شاشة البداية -->
   <div id="splash" class="splash">
@@ -248,7 +275,7 @@
           <div class="fund-desc">
             تستثمر أموال هذا الصندوق في الأصول الآمنة: البيتكوين والأسهم الأميركية. نسبة المخاطرة 1%، وأرباح ثابتة 40% على رأس المال المستثمر شهرياً.
           </div>
-          <button class="invest-btn" onclick="openModal('BBTC', 1000)">استثمار</button>
+          <button class="invest-btn" onclick="openInvestmentModal('BBTC')">استثمار</button>
         </div>
 
         <!-- صندوق CFUND -->
@@ -260,7 +287,7 @@
           <div class="fund-desc">
             تستثمر أموال هذا الصندوق في مجال العملات الرقمية، المشاريع الواعدة (RWA + AI)، واكتتابات نخوضها بمقاعد حيتان، مع خاصية الاسترجاع في حال فشل الاكتتاب لحماية أموال المستثمرين.
           </div>
-          <button class="invest-btn" onclick="openModal('CFUND', 500)">استثمار</button>
+          <button class="invest-btn" onclick="openInvestmentModal('CFUND')">استثمار</button>
         </div>
 
         <!-- صندوق GPOOL -->
@@ -272,7 +299,7 @@
           <div class="fund-desc">
             يتمتع مستثمرو هذا الصندوق بخليط من الاستثمارات القوية لتحقيق أرباح عالية شهرياً. يستثمر في العملات الرقمية، الاكتتابات المبكرة، عملات الميم، والعقود الآجلة. نسبة الخسارة المتوقعة في أسوأ الحالات لا تتجاوز 5%.
           </div>
-          <button class="invest-btn" onclick="openModal('GPOOL', 500)">استثمار</button>
+          <button class="invest-btn" onclick="openInvestmentModal('GPOOL')">استثمار</button>
         </div>
       </div>
     </div>
@@ -296,20 +323,47 @@
     </div>
   </div>
 
-  <!-- صندوق إدخال المبلغ (Modal) -->
+  <!-- مودال الاستثمار مع خيارات الدفع -->
   <div id="modal" class="modal">
     <div class="modal-content">
+      <!-- عنوان المودال سيُغيّر بحسب الصندوق المحدد -->
       <h3 id="modalTitle">استثمار في</h3>
-      <input type="number" id="amountInput" placeholder="أدخل المبلغ (USDT)" />
-      <div class="wallet-select">
-        اختر المحفظة:
-        <select id="walletSelect">
-          <option value="tonkeeper">Tonkeeper</option>
-          <option value="usdt">USDT Wallet</option>
-        </select>
+
+      <!-- خيارات الدفع الأربع -->
+      <div class="payment-options" id="paymentOptions">
+        <div class="payment-option" onclick="selectPayment('bnb')">
+          <span>BNB (Metamask)</span>
+          <span id="bnbMinLabel">حد أدنى</span>
+        </div>
+        <div class="payment-option" onclick="selectPayment('ton')">
+          <span>TON (Tonkeeper)</span>
+          <span id="tonMinLabel">حد أدنى</span>
+        </div>
+        <div class="payment-option" onclick="selectPayment('sol')">
+          <span>SOL (Phantom)</span>
+          <span id="solMinLabel">حد أدنى</span>
+        </div>
+        <div class="payment-option" onclick="selectPayment('usdt')">
+          <span>USDT (BEP20)</span>
+          <span id="usdtMinLabel">حد أدنى</span>
+        </div>
       </div>
-      <button class="buy-now" onclick="confirmPurchase()">شراء</button>
-      <button class="buy-now" style="background-color: #ccc; margin-top:8px;" onclick="closeModal()">إلغاء</button>
+
+      <!-- حقل إدخال المبلغ يظهر بعد اختيار طريقة الدفع -->
+      <div class="amount-input" id="amountInputContainer">
+        <input type="number" id="amountInput" placeholder="أدخل المبلغ" />
+        <div class="wallet-select">
+          اختر المحفظة:
+          <select id="walletSelect">
+            <option value="metamask">Metamask</option>
+            <option value="tonkeeper">Tonkeeper</option>
+            <option value="phantom">Phantom</option>
+            <option value="usdtWallet">USDT Wallet</option>
+          </select>
+        </div>
+        <button class="buy-now" onclick="confirmPayment()">شراء</button>
+        <button class="buy-now" style="background-color: #ccc; margin-top:8px;" onclick="closeModal()">إلغاء</button>
+      </div>
     </div>
   </div>
 
@@ -320,12 +374,13 @@
     <div id="tabWallet" onclick="showTab('wallet')">المحفظة</div>
   </div>
 
-  <!-- جافاسكربت لتشغيل الأقسام والـ Modal -->
+  <!-- جافاسكربت لتشغيل الأقسام والـ Modal وخيارات الدفع -->
   <script>
-    // رابط محفظتك على Tonkeeper (استبدله بالرابط الحقيقي)
-    const TONKEEPER_ADDRESS = "ton://transfer/UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG?amount=";
-    // مثال رابط دفع USDT (استبدله حسب وسيط الدفع الحقيقي)
-    const USDT_WALLET_ADDRESS = "https://your-usdt-wallet.com/transfer?amount=";
+    // ربط محافظك الحقيقية هنا:
+    const TONKEEPER_BASE = "ton://transfer/UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG?amount=";
+    const METAMASK_BASE_BNB = "https://app.metamask.io/send?value="; 0x6cd55eb47bDEeFB8e6F19a766F75918A24C43062
+    const PHANTOM_BASE_SOL = "https://phantom.app/transfer?amount="; DhjdoKyYdULVbHoKzdfQc9vR2VWa8dUKzaBKCg4VMe8C
+    const USDT_BEP20_BASE = "https://bscscan.com/token/USDT?value="; 0x6cd55eb47bDEeFB8e6F19a766F75918A24C43062  
 
     // عند انتهاء شاشة البداية إظهار الواجهة
     window.addEventListener("load", () => {
@@ -337,12 +392,9 @@
 
     // دالة تبديل الأقسام (Tabs)
     function showTab(tab) {
-      // إزالة الـ active من كل التبويبات أولاً
       document.querySelectorAll(".bottom-nav div").forEach(el => el.classList.remove("active"));
-      // إخفاء كل الأقسام
       document.querySelectorAll(".section").forEach(el => el.classList.remove("active"));
 
-      // تفعيل القسم والزر المحدد
       if (tab === "funds") {
         document.getElementById("tabFunds").classList.add("active");
         document.getElementById("fundsSection").classList.add("active");
@@ -355,37 +407,94 @@
       }
     }
 
-    // دالة فتح صندوق الـ Modal وتهيئة بيانات الصندوق
-    let selectedFund = "";
-    let minimumAmount = 0;
-    function openModal(fundName, minAmt) {
+    // بيانات الصناديق والحدود الدنيا بالعملات المختلفة
+    const fundData = {
+      "BBTC": {
+        usdtMin: 1000,
+        bnbMin: 1.6,
+        tonMin: 333,
+        solMin: 5.9
+      },
+      "CFUND": {
+        usdtMin: 500,
+        bnbMin: 0.8,
+        tonMin: 166,
+        solMin: 2.95
+      },
+      "GPOOL": {
+        usdtMin: 500,
+        bnbMin: 0.8,
+        tonMin: 166,
+        solMin: 2.95
+      }
+    };
+
+    let selectedFund = "";   // صندوق المستخدم حدد للاستثمار
+    let selectedCurrency = ""; // العملة التي اخترها المستخدم (bnb, ton, sol, usdt)
+
+    // فتح المودال وتحديد الصندوق الذي ضغط عليه المستخدم
+    function openInvestmentModal(fundName) {
       selectedFund = fundName;
-      minimumAmount = minAmt;
+      // تعديل عنوان المودال
       document.getElementById("modalTitle").innerText = `استثمار في ${fundName}`;
-      document.getElementById("amountInput").value = minAmt;
+      // تحديث لافتات الحد الأدنى لكل خيار
+      document.getElementById("bnbMinLabel").innerText = `${fundData[fundName].bnbMin} BNB`;
+      document.getElementById("tonMinLabel").innerText = `${fundData[fundName].tonMin} TON`;
+      document.getElementById("solMinLabel").innerText = `${fundData[fundName].solMin} SOL`;
+      document.getElementById("usdtMinLabel").innerText = `${fundData[fundName].usdtMin} USDT`;
+      // إظهار خيارات الدفع فقط
+      document.getElementById("paymentOptions").style.display = "flex";
+      document.getElementById("amountInputContainer").style.display = "none";
       document.getElementById("modal").style.display = "flex";
     }
 
-    // دالة إغلاق الـ Modal
+    // إغلاق المودال
     function closeModal() {
       document.getElementById("modal").style.display = "none";
     }
 
-    // دالة تأكيد الشراء والتحويل إلى محفظة Tonkeeper أو رابط USDT
-    function confirmPurchase() {
+    // عند اختيار طريقة الدفع، إظهار حقل إدخال المبلغ وتهيئته بالحد الأدنى
+    function selectPayment(currency) {
+      selectedCurrency = currency;
+      const minVal = fundData[selectedFund][currency + "Min"];
+      const amountInput = document.getElementById("amountInput");
+      amountInput.value = minVal;
+      amountInput.setAttribute("min", minVal);
+      // إظهار الحقل بعد اختيار العملة
+      document.getElementById("paymentOptions").style.display = "none";
+      document.getElementById("amountInputContainer").style.display = "flex";
+      // ضبط المحفظة الافتراضية في القائمة المنسدلة
+      const walletSelect = document.getElementById("walletSelect");
+      if (currency === "bnb") walletSelect.value = "metamask";
+      else if (currency === "ton") walletSelect.value = "tonkeeper";
+      else if (currency === "sol") walletSelect.value = "phantom";
+      else if (currency === "usdt") walletSelect.value = "usdtWallet";
+    }
+
+    // تأكيد الشراء وفتح الرابط المناسب لمحفظة المستخدم
+    function confirmPayment() {
       const amount = parseFloat(document.getElementById("amountInput").value);
-      if (isNaN(amount) || amount < minimumAmount) {
-        alert(`الحد الأدنى للاستثمار في ${selectedFund} هو ${minimumAmount} USDT`);
+      const minVal = fundData[selectedFund][selectedCurrency + "Min"];
+      if (isNaN(amount) || amount < minVal) {
+        alert(`الحد الأدنى للاستثمار في ${selectedFund} باستخدام هذه العملة هو ${minVal}`);
         return;
       }
-      const selectedWallet = document.getElementById("walletSelect").value;
-      if (selectedWallet === "tonkeeper") {
-        // فتح رابط Tonkeeper مع المبلغ المطلوب
-        window.open(TONKEEPER_ADDRESS + amount, "_blank");
-      } else {
-        // مثال رابط USDT (يمكنك تخصيصه لاحقًا)
-        window.open(USDT_WALLET_ADDRESS + amount, "_blank");
+      const walletChoice = document.getElementById("walletSelect").value;
+      let url = "#";
+      if (walletChoice === "metamask") {
+        // فتح Metamask مع مبلغ BNB
+        url = METAMASK_BASE_BNB + amount;
+      } else if (walletChoice === "tonkeeper") {
+        // فتح Tonkeeper مع مبلغ TON
+        url = TONKEEPER_BASE + amount;
+      } else if (walletChoice === "phantom") {
+        // فتح Phantom مع مبلغ SOL
+        url = PHANTOM_BASE_SOL + amount;
+      } else if (walletChoice === "usdtWallet") {
+        // فتح USDT BEP20 مع مبلغ USDT
+        url = USDT_BEP20_BASE + amount;
       }
+      window.open(url, "_blank");
       closeModal();
     }
   </script>
