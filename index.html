@@ -377,7 +377,7 @@
   <!-- جافاسكربت لتشغيل الأقسام والـ Modal وخيارات الدفع -->
   <script>
     // ربط محافظك الحقيقية هنا:
-    const TONKEEPER_BASE = "ton://transfer/UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG?amount_nano=";
+    const TONKEEPER_BASE = "ton://transfer/UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG?amount=";
     const METAMASK_BASE_BNB = "https://app.metamask.io/send?address=0x6cd55eb47bDEeFB8e6F19a766F75918A24C43062&value=";
     const PHANTOM_BASE_SOL = "https://phantom.app/transfer?recipient=DhjdoKyYdULVbHoKzdfQc9vR2VWa8dUKzaBKCg4VMe8C&amount=";
     const USDT_BEP20_BASE = "https://bscscan.com/address/0x6cd55eb47bDEeFB8e6F19a766F75918A24C43062?value=";
@@ -487,7 +487,7 @@
         const weiValue = (amount * Math.pow(10, 18)).toString();
         url = METAMASK_BASE_BNB + weiValue;
       } else if (walletChoice === "tonkeeper") {
-        // Tonkeeper لـ TON: نرسل قيمة TON مباشرة (نضرب TON في 10^9 للوصول إلى nanotons)
+        // Tonkeeper لـ TON: نرسل قيمة TON مضروبة في 10^9 (nanotons)
         const nanoTons = (amount * Math.pow(10, 9)).toString();
         url = TONKEEPER_BASE + nanoTons;
       } else if (walletChoice === "phantom") {
