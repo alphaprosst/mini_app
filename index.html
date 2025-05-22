@@ -487,8 +487,7 @@
         const weiValue = (amount * Math.pow(10, 18)).toString();
         url = METAMASK_BASE_BNB + weiValue;
       } else if (walletChoice === "tonkeeper") {
-        // Tonkeeper لـ TON: نرسل قيمة TON مباشرة (من دون تحويل إلى nanotons)
-        // لأن الكلمة المفتاحية أصبحت amount_nano، فنضرب TON في 10^9
+        // Tonkeeper لـ TON: نرسل قيمة TON مباشرة (نضرب TON في 10^9 للوصول إلى nanotons)
         const nanoTons = (amount * Math.pow(10, 9)).toString();
         url = TONKEEPER_BASE + nanoTons;
       } else if (walletChoice === "phantom") {
