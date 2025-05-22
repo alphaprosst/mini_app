@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ربط محفظة Tonkeeper</title>
+  <script type="module">
+    import { TonConnectUI } from "https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js";
+
+    const tonConnectUI = new TonConnectUI({
+      manifestUrl: 'https://https://alphaprosst.github.io/mini_app//tonconnect-manifest.json',
+      buttonRootId: 'connect-wallet-button'
+    });
+
+    tonConnectUI.onStatusChange(wallet => {
+      if (wallet) {
+        document.getElementById('wallet-address').innerText = `عنوان محفظتك: ${wallet.account.address}`;
+      }
+    });
+  </script>
+</head>
+<body>
+  <h2>اربط محفظتك Tonkeeper</h2>
+  <div id="connect-wallet-button"></div>
+  <p id="wallet-address"></p>
+</body>
+</html>
