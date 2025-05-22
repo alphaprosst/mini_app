@@ -297,7 +297,7 @@
             <div class="fund-growth">100%</div>
           </div>
           <div class="fund-desc">
-            يتمتع مستثمرو هذا الصندوق بخليط من الاستثمارات القوية لتحقيق أرباح عالية شهرياً. يستثمر في العملات الرقمية، الاكتتابات المبكرة، عملات الميم، والعقود الآجلة. نسبة الخسارة المتوقعة في أسوأ الحالات لا تتجاوز 5%.
+            يتمتع مستثمرون هذا الصندوق بخليط من الاستثمارات القوية لتحقيق أرباح عالية شهرياً. يستثمر في العملات الرقمية، الاكتتابات المبكرة، عملات الميم، والعقود الآجلة. نسبة الخسارة المتوقعة في أسوأ الحالات لا تتجاوز 5%.
           </div>
           <button class="invest-btn" onclick="openInvestmentModal('GPOOL')">استثمار</button>
         </div>
@@ -479,21 +479,27 @@
         alert(`الحد الأدنى للاستثمار في ${selectedFund} باستخدام هذه العملة هو ${minVal}`);
         return;
       }
-      const walletChoice = document.getElementById("walletSelect").value;
+
       let url = "#";
+      const walletChoice = document.getElementById("walletSelect").value;
       if (walletChoice === "metamask") {
-        // فتح Metamask مع مبلغ BNB
-        url = METAMASK_BASE_BNB + amount;
+        // Metamask لـ BNB: نحسب القيمة بـ Wei (1 BNB = 10^18 Wei)
+        const weiValue = (amount * Math.pow(10, 18)).toString();
+        url = METAMASK_BASE_BNB + weiValue;
       } else if (walletChoice === "tonkeeper") {
-        // فتح Tonkeeper مع مبلغ TON
-        url = TONKEEPER_BASE + amount;
+        // Tonkeeper لـ TON: نحسب القيمة بـ nanotons (1 TON = 10^9 nanotons)
+        const nanoTons = (amount * Math.pow(10, 9)).toString();
+        url = TONKEEPER_BASE + nanoTons;
       } else if (walletChoice === "phantom") {
-        // فتح Phantom مع مبلغ SOL
-        url = PHANTOM_BASE_SOL + amount;
+        // Phantom لـ SOL: نحسب القيمة بـ lamports (1 SOL = 10^9 lamports)
+        const lamports = (amount * Math.pow(10, 9)).toString();
+        url = PHANTOM_BASE_SOL + lamports;
       } else if (walletChoice === "usdtWallet") {
-        // فتح USDT BEP20 مع مبلغ USDT
-        url = USDT_BEP20_BASE + amount;
+        // USDT BEP20: عُملات USDT عادة بِـ 18 خانة عشرية
+        const tokenUnits = (amount * Math.pow(10, 18)).toString();
+        url = USDT_BEP20_BASE + tokenUnits;
       }
+
       window.open(url, "_blank");
       closeModal();
     }
