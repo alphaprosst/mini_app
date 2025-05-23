@@ -1,5 +1,5 @@
-.:
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -14,348 +14,368 @@
     }
     body {
       background-color: #00C569; /* أخضر فاتح مثل شعار الجمل */
-    }/* -------------- شاشة البداية (Splash) -------------- */
-#splash {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background-color: #00C569;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-#splash img {
-  width: 150px;
-  height: 150px;
-}
+    }
 
-/* -------------- الواجهة الرئيسية (Main Content) -------------- */
-.main {
-  display: none; /* تظهر بعد انتهاء Splash */
-  background-color: #ffffff;
-  min-height: 100vh;
-  position: relative;
-  padding-bottom: 60px; /* مساحة لشريط التنقل السفلي */
-}
+    /* -------------- شاشة البداية (Splash) -------------- */
+    #splash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-color: #00C569;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    #splash img {
+      width: 150px;
+      height: 150px;
+    }
 
-/* -------------- الهيدر: شعار الجمل على اليسار -------------- */
-.header {
-  background-color: #ffffff;
-  display: flex;
-  justify-content: flex-start; /* الشعار على اليسار في العربية */
-  align-items: center;
-  padding: 12px 20px;
-  border-bottom: 1px solid #ddd;
-}
-.header img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-}
+    /* -------------- الواجهة الرئيسية (Main Content) -------------- */
+    .main {
+      display: none; /* تظهر بعد انتهاء Splash */
+      background-color: #ffffff;
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 60px; /* مساحة لشريط التنقل السفلي */
+    }
 
-/* -------------- الحاوية العامة -------------- */
-.container {
-  padding: 16px 20px;
-}
+    /* -------------- الهيدر: شعار الجمل على اليسار -------------- */
+    .header {
+      background-color: #ffffff;
+      display: flex;
+      justify-content: flex-start; /* الشعار على اليسار في العربية */
+      align-items: center;
+      padding: 12px 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    .header img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
 
-/* -------------- بطاقات الصناديق -------------- */
-.fund {
-  background-color: #F8F8F8;
-  margin-bottom: 16px;
-  border-radius: 12px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  padding: 12px;
-  transition: transform 0.2s ease;
-}
-.fund:hover {
-  transform: scale(1.02);
-}
-.fund-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.fund-name {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-}
-.fund-growth {
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  color: green;
-  font-weight: bold;
-}
-.fund-growth::before {
-  content: '↑'; 
-  margin-left: 6px;
-  font-size: 20px;
-}
-.fund-desc {
-  margin-top: 8px;
-  font-size: 14px;
-  color: #555;
-  line-height: 1.6;
-}
-.invest-btn {
-  margin-top: 10px;
-  background-color: #00C569;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-.invest-btn:hover {
-  background-color: #0ba158;
-}
+    /* -------------- الحاوية العامة -------------- */
+    .container {
+      padding: 16px 20px;
+    }
 
-/* -------------- صندوق إدخال المبلغ (Modal + خيارات الدفع) -------------- */
-.modal {
-  display: none;
-  position: fixed;
-  bottom: 60px; /* فوق شريط التنقل السفلي */
-  left: 0; right: 0;
-  background-color: rgba(0,0,0,0.5);
-  height: calc(100vh - 60px);
-  justify-content: center;
-  align-items: center;
-  z-index: 1001;
-}
-.modal-content {
-  background-color: #fff;
-  width: 90%;
-  max-width: 400px;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-.modal-content h3 {
-  margin-bottom: 12px;
-  font-size: 20px;
-  color: #333;
-}
-.payment-options {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 16px;
-}
-.payment-option {
-  background-color: #F8F8F8;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.payment-option:hover {
-  background-color: #eee;
-}
-.payment-option span {
-  font-weight: bold;
-  color: #006C3F;
-}
-.amount-input {
-  display: none;
-  flex-direction: column;
-}
-.amount-input input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-bottom: 16px;
-}
-.amount-input .buy-now {
-  background-color: #00C569;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  width: 100%;
-  padding: 12px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-.amount-input .buy-now:hover {
-  background-color: #0ba158;
-}
+    /* -------------- بطاقات الصناديق -------------- */
+    .fund {
+      background-color: #F8F8F8;
+      margin-bottom: 16px;
+      border-radius: 12px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      transition: transform 0.2s ease;
+    }
+    .fund:hover {
+      transform: scale(1.02);
+    }
+    .fund-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .fund-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+    .fund-growth {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      color: green;
+      font-weight: bold;
+    }
+    .fund-growth::before {
+      content: '↑'; 
+      margin-left: 6px;
+      font-size: 20px;
+    }
+    .fund-desc {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .invest-btn {
+      margin-top: 10px;
+      background-color: #00C569;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    .invest-btn:hover {
+      background-color: #0ba158;
+    }
 
-/* -------------- قائمة الأزرار السفلية -------------- */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0; right: 0;
-  height: 60px;
-  background-color: #ffffff;
-  border-top: 1px solid #ccc;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  z-index: 1000;
-}
-.bottom-nav div {
-  text-align: center;
-  font-size: 14px;
-  color: #006C3F;
-  cursor: pointer;
-}
-.bottom-nav .active {
-  color: #00C569;
-  font-weight: bold;
-}
+    /* -------------- صندوق إدخال المبلغ (Modal + خيارات الدفع) -------------- */
+    .modal {
+      display: none;
+      position: fixed;
+      bottom: 60px; /* فوق شريط التنقل السفلي */
+      left: 0; right: 0;
+      background-color: rgba(0,0,0,0.5);
+      height: calc(100vh - 60px);
+      justify-content: center;
+      align-items: center;
+      z-index: 1001;
+    }
+    .modal-content {
+      background-color: #fff;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .modal-content h3 {
+      margin-bottom: 12px;
+      font-size: 20px;
+      color: #333;
+    }
+    .payment-options {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 16px;
+    }
+    .payment-option {
+      background-color: #F8F8F8;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .payment-option:hover {
+      background-color: #eee;
+    }
+    .payment-option span {
+      font-weight: bold;
+      color: #006C3F;
+    }
+    .amount-input {
+      display: none;
+      flex-direction: column;
+    }
+    .amount-input input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 16px;
+    }
+    .amount-input .buy-now {
+      background-color: #00C569;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    .amount-input .buy-now:hover {
+      background-color: #0ba158;
+    }
 
-/* -------------- صورة الجمل -------------- */
-.camel-image {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  width: 80px;
-  height: 80px;
-}
+    /* -------------- قائمة الأزرار السفلية -------------- */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0; right: 0;
+      height: 60px;
+      background-color: #ffffff;
+      border-top: 1px solid #ccc;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 1000;
+    }
+    .bottom-nav div {
+      text-align: center;
+      font-size: 14px;
+      color: #006C3F;
+      cursor: pointer;
+    }
+    .bottom-nav .active {
+      color: #00C569;
+      font-weight: bold;
+    }
 
-/* -------------- الأقسام المخفية (Tabs) -------------- */
-.section {
-  display: none;
-}
-.section.active {
-  display: block;
-}
+    /* -------------- صورة الجمل -------------- */
+    .camel-image {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 80px;
+      height: 80px;
+    }
 
-/* -------------- قسم الإحالات والمحفظة -------------- */
-.info-box {
-  background-color: #F8F8F8;
-  padding: 16px;
-  border-radius: 10px;
-  margin-bottom: 16px;
-  font-size: 18px;
-  color: #333;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+    /* -------------- الأقسام المخفية (Tabs) -------------- */
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
+    }
 
+    /* -------------- قسم الإحالات والمحفظة -------------- */
+    .info-box {
+      background-color: #F8F8F8;
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 18px;
+      color: #333;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
-<body>  <!-- صورة الجمل -->  <img class="camel-image" src="logo.png" alt="جمل للاستثمار" />  <!-- شاشة البداية -->  <div id="splash" class="splash">
+<body>
+
+  <!-- صورة الجمل -->
+  <img class="camel-image" src="logo.png" alt="جمل للاستثمار" />
+
+  <!-- شاشة البداية -->
+  <div id="splash" class="splash">
     <img src="logo.png" alt="logo" />
-  </div>  <!-- الواجهة الرئيسية -->  <div id="app" class="main">
+  </div>
+
+  <!-- الواجهة الرئيسية -->
+  <div id="app" class="main">
     <!-- هيدر الشعار -->
     <div class="header">
       <img src="logo.png" alt="logo" />
-    </div><!-- القسم: الصناديق -->
-<div id="fundsSection" class="section active">
-  <div class="container">
-    <!-- صندوق BBTC -->
-    <div class="fund">
-      <div class="fund-header">
-        <div class="fund-name">BBTC</div>
-        <div class="fund-growth">40%</div>
-      </div>
-      <div class="fund-desc">
-        تستثمر أموال هذا الصندوق في الأصول الآمنة: البيتكوين والأسهم الأميركية. نسبة المخاطرة 1%، وأرباح ثابتة 40% على رأس المال المستثمر شهرياً.
-      </div>
-      <button class="invest-btn" onclick="openInvestmentModal('BBTC')">استثمار</button>
     </div>
 
-    <!-- صندوق CFUND -->
-    <div class="fund">
-      <div class="fund-header">
-        <div class="fund-name">CFUND</div>
-        <div class="fund-growth">60%</div>
+    <!-- القسم: الصناديق -->
+    <div id="fundsSection" class="section active">
+      <div class="container">
+        <!-- صندوق BBTC -->
+        <div class="fund">
+          <div class="fund-header">
+            <div class="fund-name">BBTC</div>
+            <div class="fund-growth">40%</div>
+          </div>
+          <div class="fund-desc">
+            تستثمر أموال هذا الصندوق في الأصول الآمنة: البيتكوين والأسهم الأميركية. نسبة المخاطرة 1%، وأرباح ثابتة 40% على رأس المال المستثمر شهرياً.
+          </div>
+          <button class="invest-btn" onclick="openInvestmentModal('BBTC')">استثمار</button>
+        </div>
+
+        <!-- صندوق CFUND -->
+        <div class="fund">
+          <div class="fund-header">
+            <div class="fund-name">CFUND</div>
+            <div class="fund-growth">60%</div>
+          </div>
+          <div class="fund-desc">
+            تستثمر أموال هذا الصندوق في مجال العملات الرقمية، المشاريع الواعدة (RWA + AI)، واكتتابات نخوضها بمقاعد حيتان، مع خاصية الاسترجاع في حال فشل الاكتتاب لحماية أموال المستثمرين.
+          </div>
+          <button class="invest-btn" onclick="openInvestmentModal('CFUND')">استثمار</button>
+        </div>
+
+        <!-- صندوق GPOOL -->
+        <div class="fund">
+          <div class="fund-header">
+            <div class="fund-name">GPOOL</div>
+            <div class="fund-growth">100%</div>
+          </div>
+          <div class="fund-desc">
+            يتمتع مستثمرو هذا الصندوق بخليط من الاستثمارات القوية لتحقيق أرباح عالية شهرياً. يستثمر في العملات الرقمية، الاكتتابات المبكرة، عملات الميم، والعقود الآجلة. نسبة الخسارة المتوقعة في أسوأ الحالات لا تتجاوز 5%.
+          </div>
+          <button class="invest-btn" onclick="openInvestmentModal('GPOOL')">استثمار</button>
+        </div>
       </div>
-      <div class="fund-desc">
-        تستثمر أموال هذا الصندوق في مجال العملات الرقمية، المشاريع الواعدة (RWA + AI)، واكتتابات نخوضها بمقاعد حيتان، مع خاصية الاسترجاع في حال فشل الاكتتاب لحماية أموال المستثمرين.
-      </div>
-      <button class="invest-btn" onclick="openInvestmentModal('CFUND')">استثمار</button>
     </div>
 
-    <!-- صندوق GPOOL -->
-    <div class="fund">
-      <div class="fund-header">
-        <div class="fund-name">GPOOL</div>
-        <div class="fund-growth">100%</div>
+    <!-- القسم: الإحالات -->
+    <div id="referralsSection" class="section">
+      <div class="container">
+        <div class="info-box">
+          عدد الإحالات الخاصة بك: <strong id="referralCount">0</strong>
+        </div>
       </div>
-      <div class="fund-desc">
-        يتمتع مستثمرون هذا الصندوق بخليط من الاستثمارات القوية لتحقيق أرباح عالية شهرياً. يستثمر في العملات الرقمية، الاكتتابات المبكرة، عملات الميم، والعقود الآجلة. نسبة الخسارة المتوقعة في أسوأ الحالات لا تتجاوز 5%.
+    </div>
+
+    <!-- القسم: المحفظة -->
+    <div id="walletSection" class="section">
+      <div class="container">
+        <div class="info-box">
+          أرباحك الحالية: <strong id="walletBalance">0.00 USDT</strong>
+        </div>
       </div>
-      <button class="invest-btn" onclick="openInvestmentModal('GPOOL')">استثمار</button>
     </div>
   </div>
-</div>
 
-<!-- القسم: الإحالات -->
-<div id="referralsSection" class="section">
-  <div class="container">
-    <div class="info-box">
-      عدد الإحالات الخاصة بك: <strong id="referralCount">0</strong>
-    </div>
-  </div>
-</div>
-
-<!-- القسم: المحفظة -->
-<div id="walletSection" class="section">
-  <div class="container">
-    <div class="info-box">
-      أرباحك الحالية: <strong id="walletBalance">0.00 USDT</strong>
-    </div>
-  </div>
-</div>
-
-  </div>  <!-- مودال الاستثمار مع خيارات الدفع -->  <div id="modal" class="modal">
+  <!-- مودال الاستثمار مع خيارات الدفع -->
+  <div id="modal" class="modal">
     <div class="modal-content">
       <!-- عنوان المودال سيُغيّر بحسب الصندوق المحدد -->
-      <h3 id="modalTitle">استثمار في</h3><!-- خيارات الدفع الأربع -->
-  <div class="payment-options" id="paymentOptions">
-    <div class="payment-option" onclick="selectPayment('bnb')">
-      <span>BNB (Metamask)</span>
-      <span id="bnbMinLabel">حد أدنى</span>
+      <h3 id="modalTitle">استثمار في</h3>
 
-</div>
-    <div class="payment-option" onclick="selectPayment('ton')">
-      <span>TON (Tonkeeper)</span>
-      <span id="tonMinLabel">حد أدنى</span>
-    </div>
-    <div class="payment-option" onclick="selectPayment('sol')">
-      <span>SOL (Phantom)</span>
-      <span id="solMinLabel">حد أدنى</span>
-    </div>
-    <div class="payment-option" onclick="selectPayment('usdt')">
-      <span>USDT (BEP20)</span>
-      <span id="usdtMinLabel">حد أدنى</span>
+      <!-- خيارات الدفع الأربع -->
+      <div class="payment-options" id="paymentOptions">
+        <div class="payment-option" onclick="selectPayment('bnb')">
+          <span>BNB (Metamask)</span>
+          <span id="bnbMinLabel">حد أدنى</span>
+        </div>
+        <div class="payment-option" onclick="selectPayment('ton')">
+          <span>TON (Tonkeeper)</span>
+          <span id="tonMinLabel">حد أدنى</span>
+        </div>
+        <div class="payment-option" onclick="selectPayment('sol')">
+          <span>SOL (Phantom)</span>
+          <span id="solMinLabel">حد أدنى</span>
+        </div>
+        <div class="payment-option" onclick="selectPayment('usdt')">
+          <span>USDT (BEP20)</span>
+          <span id="usdtMinLabel">حد أدنى</span>
+        </div>
+      </div>
+
+      <!-- حقل إدخال المبلغ يظهر بعد اختيار طريقة الدفع -->
+      <div class="amount-input" id="amountInputContainer">
+        <input type="number" id="amountInput" placeholder="أدخل المبلغ" />
+        <div class="wallet-select">
+          اختر المحفظة:
+          <select id="walletSelect">
+            <option value="metamask">Metamask</option>
+            <option value="tonkeeper">Tonkeeper</option>
+            <option value="phantom">Phantom</option>
+            <option value="usdtWallet">USDT Wallet</option>
+          </select>
+        </div>
+        <button class="buy-now" onclick="confirmPayment()">شراء</button>
+        <button class="buy-now" style="background-color: #ccc; margin-top:8px;" onclick="closeModal()">إلغاء</button>
+      </div>
     </div>
   </div>
 
-  <!-- حقل إدخال المبلغ يظهر بعد اختيار طريقة الدفع -->
-  <div class="amount-input" id="amountInputContainer">
-    <input type="number" id="amountInput" placeholder="أدخل المبلغ" />
-    <div class="wallet-select">
-      اختر المحفظة:
-      <select id="walletSelect">
-        <option value="metamask">Metamask</option>
-        <option value="tonkeeper">Tonkeeper</option>
-        <option value="phantom">Phantom</option>
-        <option value="usdtWallet">USDT Wallet</option>
-      </select>
-    </div>
-    <button class="buy-now" onclick="confirmPayment()">شراء</button>
-    <button class="buy-now" style="background-color: #ccc; margin-top:8px;" onclick="closeModal()">إلغاء</button>
-  </div>
-</div>
-
-  </div>  <!-- شريط التنقل السفلي -->  <div class="bottom-nav">
+  <!-- شريط التنقل السفلي -->
+  <div class="bottom-nav">
     <div id="tabFunds" class="active" onclick="showTab('funds')">الصناديق</div>
     <div id="tabReferrals" onclick="showTab('referrals')">الإحالات</div>
     <div id="tabWallet" onclick="showTab('wallet')">المحفظة</div>
-  </div>  <!-- جافاسكربت لتشغيل الأقسام والـ Modal وخيارات الدفع -->  <script>
+  </div>
+
+  <!-- جافاسكربت لتشغيل الأقسام والـ Modal وخيارات الدفع -->
+  <script>
     // ربط محافظك الحقيقية هنا:
     const TONKEEPER_BASE = "ton://transfer/UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG?amount=";
     const METAMASK_BASE_BNB = "https://app.metamask.io/send?address=0x6cd55eb47bDEeFB8e6F19a766F75918A24C43062&value=";
@@ -415,14 +435,13 @@
     // فتح المودال وتحديد الصندوق الذي ضغط عليه المستخدم
     function openInvestmentModal(fundName) {
       selectedFund = fundName;
-
-// تعديل عنوان المودال
-      document.getElementById("modalTitle").innerText = استثمار في ${fundName};
+      // تعديل عنوان المودال
+      document.getElementById("modalTitle").innerText = `استثمار في ${fundName}`;
       // تحديث لافتات الحد الأدنى لكل خيار
-      document.getElementById("bnbMinLabel").innerText = ${fundData[fundName].bnbMin} BNB;
-      document.getElementById("tonMinLabel").innerText = ${fundData[fundName].tonMin} TON;
-      document.getElementById("solMinLabel").innerText = ${fundData[fundName].solMin} SOL;
-      document.getElementById("usdtMinLabel").innerText = ${fundData[fundName].usdtMin} USDT;
+      document.getElementById("bnbMinLabel").innerText = `${fundData[fundName].bnbMin} BNB`;
+      document.getElementById("tonMinLabel").innerText = `${fundData[fundName].tonMin} TON`;
+      document.getElementById("solMinLabel").innerText = `${fundData[fundName].solMin} SOL`;
+      document.getElementById("usdtMinLabel").innerText = `${fundData[fundName].usdtMin} USDT`;
       // إظهار خيارات الدفع فقط
       document.getElementById("paymentOptions").style.display = "flex";
       document.getElementById("amountInputContainer").style.display = "none";
@@ -457,7 +476,7 @@
       const amount = parseFloat(document.getElementById("amountInput").value);
       const minVal = fundData[selectedFund][selectedCurrency + "Min"];
       if (isNaN(amount) || amount < minVal) {
-        alert(الحد الأدنى للاستثمار في ${selectedFund} باستخدام هذه العملة هو ${minVal});
+        alert(`الحد الأدنى للاستثمار في ${selectedFund} باستخدام هذه العملة هو ${minVal}`);
         return;
       }
 
@@ -484,5 +503,6 @@
       window.open(url, "_blank");
       closeModal();
     }
-  </script></body>
+  </script>
+</body>
 </html>
