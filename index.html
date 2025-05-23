@@ -131,6 +131,7 @@
       z-index: 1001;
     }
     .modal-content {
+      position: relative; /* لإظهار زر الإغلاق */
       background-color: #fff;
       width: 90%;
       max-width: 400px;
@@ -139,8 +140,25 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     .modal-content h3 {
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       font-size: 20px;
+      color: #333;
+    }
+    /* عبارة “الدفع حصراً عبر محفظة Tonkeeper” */
+    .modal-note {
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #E63946; /* لون أحمر واضح */
+      text-align: center;
+      font-weight: bold;
+    }
+    /* زر الإغلاق X */
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      left: 12px; /* لأن اللغة RTL */
+      font-size: 20px;
+      cursor: pointer;
       color: #333;
     }
     .payment-options {
@@ -221,7 +239,7 @@
     .camel-image {
       position: fixed;
       top: 10px;
-      right: 10px;
+      left: 10px; /* تحريك من اليمين إلى اليسار */
       width: 80px;
       height: 80px;
     }
@@ -297,7 +315,7 @@
             <div class="fund-growth">100%</div>
           </div>
           <div class="fund-desc">
-            يتمتع مستثمرون هذا الصندوق بخليط من الاستثمارات القوية لتحقيق أرباح عالية شهرياً. يستثمر في العملات الرقمية، الاكتتابات المبكرة، عملات الميم، والعقود الآجلة. نسبة الخسارة المتوقعة في أسوأ الحالات لا تتجاوز 5%.
+            يتمتع مستثمرو هذا الصندوق بخليط من الاستثمارات القوية لتحقيق أرباح عالية شهرياً. يستثمر في العملات الرقمية، الاكتتابات المبكرة، عملات الميم، والعقود الآجلة. نسبة الخسارة المتوقعة في أسوأ الحالات لا تتجاوز 5%.
           </div>
           <button class="invest-btn" onclick="openInvestmentModal('GPOOL')">استثمار</button>
         </div>
@@ -326,8 +344,14 @@
   <!-- مودال الاستثمار مع خيارات الدفع -->
   <div id="modal" class="modal">
     <div class="modal-content">
-      <!-- عنوان المودال سيُغيّر بحسب الصندوق المحدد -->
+      <!-- زر إغلاق -->
+      <div class="close-btn" onclick="closeModal()">✖</div>
+
+      <!-- عنوان المودال -->
       <h3 id="modalTitle">استثمار في</h3>
+
+      <!-- عبارة “الدفع حصراً عبر محفظة Tonkeeper” -->
+      <div class="modal-note">الدفع حصراً عبر محفظة Tonkeeper</div>
 
       <!-- خيارات الدفع (تم تحديثها لتحتوي فقط على TON و USDT على شبكة TON) -->
       <div class="payment-options" id="paymentOptions">
@@ -394,7 +418,6 @@
     // بيانات الصناديق والحدود الدنيا بالعملات المختلفة
     const fundData = {
       "BBTC": {
-        // ابقِ القيم كما كانت للعرض فقط
         usdtTonMin: 1000,  // كان usdtMin سابقًا بالـ BEP20 → الآن نستخدم شبكة TON
         tonMin: 333
       },
