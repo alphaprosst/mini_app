@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>الجمل للاستثمار</title>
-  <!-- رابط مكتبة TonConnectUI -->
+  <!-- رابط مكتبة TonConnectUI (للربط والإرسال) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tonconnect/ui/dist/tonconnect-ui.min.css" />
   <style>
     /* -------------- Reset عام -------------- */
@@ -245,7 +245,7 @@
     .camel-image {
       position: fixed;
       top: 10px;
-      right: 10px; /* شعار الجمل على اليمين */
+      right: 10px; /* تم تغيير المحاذاة إلى اليمين */
       width: 80px;
       height: 80px;
     }
@@ -281,7 +281,7 @@
   <div id="app" class="main">
     <!-- هيدر الشعار وزر ربط المحفظة -->
     <div class="header">
-      <!-- TonConnectUI سيُدرج زر الربط هنا تلقائيًا -->
+      <!-- TonConnectUI يدرج زر الربط هنا تلقائيًا -->
       <div id="connect-wallet"></div>
       <!-- شعار الجمل على اليمين -->
       <img src="logo.png" alt="logo" />
@@ -400,19 +400,19 @@
     });
 
     // ======== عناوين الاستقبال ========
-    // عنوان Jetton Wallet الخاص باستقبال USDT على TON
-    const USDT_TON_WALLET_ADDRESS = "EQCOXQ97FsPxmUJrmeKIZUrQMCKA3NnhTYeqt2s3-v83twxW";
-    // عنوان Jetton Master لـ USDT على TON
+    // عنوان TIP-3 (Jetton Master) لـ USDT على شبكة TON
     const USDT_TON_JETTON_MASTER = "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs";
+    // عنوان Jetton Wallet الخاص باستقبال USDT
+    const USDT_TON_WALLET_ADDRESS = "EQCOXQ97FsPxmUJrmeKIZUrQMCKA3NnhTYeqt2s3-v83twxW";
     // عنوان TON-native (لإرسال TON مباشرة إلى TONkeeper)
     const TON_RECEIVER_ADDRESS = "UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG";
 
-    // عند انتهاء شاشة البداية إظهار الواجهة
+    // عند انتهاء شاشة البداية إظهار الواجهة (مدة الظهور: ثانيتين)
     window.addEventListener("load", () => {
       setTimeout(() => {
         document.getElementById("splash").style.display = "none";
         document.getElementById("app").style.display = "block";
-      }, 1800);
+      }, 2000);
     });
 
     // دالة تبديل الأقسام (Tabs)
@@ -503,7 +503,7 @@
           alert(`الحد الأدنى للاستثمار في ${selectedFund} هو ${minVal} TON`);
           return;
         }
-        // تحويل TON إلى نانوتون (1 TON = 10^9 nanotons)
+        // تحويل TON إلى نانوتون (1 TON = 10^9 nanounits)
         const nano = (amount * Math.pow(10, 9)).toFixed(0);
         try {
           await tonConnectUI.send({
@@ -521,7 +521,7 @@
           alert(`الحد الأدنى للاستثمار في ${selectedFund} هو ${minVal} USDT`);
           return;
         }
-        // تحويل USDT إلى نانو وحدات (1 USDT = 10^9 nanounits في TIP-3)
+        // تحويل USDT إلى نانو وحدات (1 USDT = 10^9 nanounits)
         const nano = Math.floor(amount * Math.pow(10, 9));
         try {
           await tonConnectUI.send({
