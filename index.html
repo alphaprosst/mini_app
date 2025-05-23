@@ -45,7 +45,7 @@
     .header {
       background-color: #ffffff;
       display: flex;
-      justify-content: flex-end; /* الشعار على اليمين */
+      justify-content: flex-end; /* الشعار على اليمين في العربية */
       align-items: center;
       padding: 12px 20px;
       border-bottom: 1px solid #ddd;
@@ -353,14 +353,14 @@
       <!-- عبارة “الدفع حصراً عبر محفظة Tonkeeper” -->
       <div class="modal-note">الدفع حصراً عبر محفظة Tonkeeper</div>
 
-      <!-- خيارات الدفع (تم تحديثها لتحتوي فقط على TON و USDT على شبكة TON) -->
+      <!-- خيارات الدفع (TON أو USDT على شبكة TON) -->
       <div class="payment-options" id="paymentOptions">
         <!-- خيار دفع TON عبر Tonkeeper -->
         <div class="payment-option" onclick="selectPayment('ton')">
           <span>TON (Tonkeeper)</span>
           <span id="tonMinLabel">حد أدنى</span>
         </div>
-        <!-- خيار دفع USDT عبر شبكة TON (نحو صفحة ربطة وإرسال) -->
+        <!-- خيار دفع USDT عبر شبكة TON (نحو صفحة ربط وإرسال USDT) -->
         <div class="payment-option" onclick="selectPayment('usdtTon')">
           <span>USDT (شبكة TON)</span>
           <span id="usdtTonMinLabel">حد أدنى</span>
@@ -431,28 +431,29 @@
     function confirmPayment() {
       const amount = parseFloat(document.getElementById("amountInput").value);
       let minVal = 0;
+
       if (selectedCurrency === "ton") {
+        // ١) تأكد المبلغ ≥ الحد الأدنى
         minVal = fundData[selectedFund].tonMin;
         if (isNaN(amount) || amount < minVal) {
           alert(`الحد الأدنى للاستثمار في ${selectedFund} هو ${minVal} TON`);
           return;
         }
-        // نرسل TON (بالنانوتون) مباشرة عبر deep link:
+        // ٢) نرسل TON (بالنانوتون) مباشرة عبر deep link:
         const nano = (amount * Math.pow(10, 9)).toFixed(0);
         const TONKEEPER_BASE = "ton://transfer/UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG?amount=";
         window.open(TONKEEPER_BASE + nano, "_blank");
         closeModal();
       }
       else if (selectedCurrency === "usdtTon") {
+        // ١) تأكد المبلغ ≥ الحد الأدنى
         minVal = fundData[selectedFund].usdtTonMin;
         if (isNaN(amount) || amount < minVal) {
           alert(`الحد الأدنى للاستثمار في ${selectedFund} هو ${minVal} USDT`);
           return;
         }
-        // بدلاً من deep link لـ TON، نوجّه المستخدم إلى صفحة wallet-connect-usdt.html
-        // مع تمرير المبلغ كـ query parameter:
+        // ٢) نوجّه المستخدم إلى صفحة wallet-connect-usdt.html مع تمرير المبلغ:
         window.location.href = `wallet-connect-usdt.html?amount=${amount}`;
-        // لا ننسى إلغاء فتح الـ modal هنا (لأنّنا نعيد التوجيه للصفحة الجديدة)
         closeModal();
       }
     }
