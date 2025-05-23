@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>الجمل للاستثمار</title>
-  <!-- TonConnectUI CSS -->
+  <!-- رابط مكتبة TonConnectUI (للربط والإرسال) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tonconnect/ui/dist/tonconnect-ui.min.css" />
   <style>
     /* -------------- Reset عام -------------- */
@@ -47,7 +47,7 @@
     .header {
       background-color: #ffffff;
       display: flex;
-      justify-content: space-between; /* الشعار على اليمين، زر الربط على اليسار */
+      justify-content: space-between; /* شعار الجمل على اليمين وزر الربط على اليسار */
       align-items: center;
       padding: 12px 20px;
       border-bottom: 1px solid #ddd;
@@ -59,6 +59,7 @@
     }
     #connect-wallet {
       font-size: 14px;
+      cursor: pointer;
     }
 
     /* -------------- الحاوية العامة -------------- */
@@ -280,7 +281,7 @@
   <div id="app" class="main">
     <!-- هيدر الشعار وزر ربط المحفظة -->
     <div class="header">
-      <!-- زر ربط المحفظة -->
+      <!-- TonConnectUI يدرج زر الربط هنا تلقائيًا -->
       <div id="connect-wallet"></div>
       <!-- شعار الجمل على اليمين -->
       <img src="logo.png" alt="logo" />
@@ -391,17 +392,17 @@
   <!-- TonConnectUI JS -->
   <script src="https://cdn.jsdelivr.net/npm/@tonconnect/ui/dist/tonconnect-ui.min.js"></script>
   <script>
-    // ======== ربط TonConnectUI باستخدام ملف manifest لــ USDT على TON ========
+    // ======== إعداد TonConnectUI لــ USDT على TON ========
     const manifestUrl = "https://alphaprosst.github.io/mini_app/tonconnect-usdt-manifest.json";
     const tonConnectUI = new TonConnectUI({
       manifestUrl: manifestUrl,
       buttonRootId: "connect-wallet"
     });
 
-    // === عناوين الاستقبال لديك: ===
-    // عنوان TIP-3 (Jetton) لعملة USDT على شبكة TON:
+    // ======== عناوين الاستقبال ========
+    // عنوان TIP-3 (Jetton) لعملة USDT على شبكة TON
     const USDT_TON_JETTON_ADDRESS = "UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG";
-    // عنوان TON-native لاستقبال TON (استبدله بعنوانك إذا مختلف):
+    // عنوان TON-native (لإرسال TON مباشرة إلى TONkeeper)
     const TON_RECEIVER_ADDRESS = "UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG";
 
     // عند انتهاء شاشة البداية إظهار الواجهة
@@ -489,7 +490,7 @@
       document.getElementById("amountInputContainer").style.display = "flex";
     }
 
-    // تأكيد الشراء وفتح TonConnect لإرسال المعاملة
+    // تأكيد الدفع: إرسال TON-native أو USDT-jetton إلى Tonkeeper
     async function confirmPayment() {
       const amount = parseFloat(document.getElementById("amountInput").value);
       let minVal = 0;
@@ -500,12 +501,12 @@
           alert(`الحد الأدنى للاستثمار في ${selectedFund} هو ${minVal} TON`);
           return;
         }
-        // نرسل TON-native عبر TonConnect
+        // تحويل TON إلى نانوتون (1 TON = 10^9 nanotons)
+        const nano = (amount * Math.pow(10, 9)).toFixed(0);
         try {
-          const nano = (amount * Math.pow(10, 9)).toFixed(0);
           await tonConnectUI.send({
             to: TON_RECEIVER_ADDRESS,
-            amount: nano  // بالـ nanograms
+            amount: nano
           });
         } catch (err) {
           console.error("خطأ أثناء إرسال TON:", err);
@@ -518,9 +519,9 @@
           alert(`الحد الأدنى للاستثمار في ${selectedFund} هو ${minVal} USDT`);
           return;
         }
-        // نرسل USDT-TIP3 عبر TonConnect
+        // تحويل USDT إلى نانو وحدات (1 USDT = 10^9 nanounits في TIP-3)
+        const nano = Math.floor(amount * Math.pow(10, 9));
         try {
-          const nano = Math.floor(amount * Math.pow(10, 9)); // تحويل USDT إلى نانو وحدات
           await tonConnectUI.send({
             jetton: {
               address: USDT_TON_JETTON_ADDRESS,
@@ -528,7 +529,7 @@
             }
           });
         } catch (err) {
-          console.error("خطأ أثناء إرسال USDT-TON:", err);
+          console.error("خطأ أثناء إرسال USDT:", err);
           alert("فشل إرسال معاملة USDT. تأكد من الربط والمبلغ.");
         }
       }
@@ -536,15 +537,15 @@
       closeModal();
     }
 
-    // عند نجاح الربط، نظهر حقل إدخال المبلغ مباشرةً
+    // عندما يتم الربط بنجاح، يظهر نص تأكيد
     tonConnectUI.on("connect", () => {
-      document.getElementById("connect-wallet").innerHTML = "تم ربط المحفظة بنجاح!";
+      document.getElementById("connect-wallet").innerText = "تم ربط المحفظة بنجاح!";
     });
 
-    // عند قطع الاتصال، نرجع الزر
+    // عند قطع الاتصال، يعيد TonConnectUI إظهار زر الربط تلقائيًا
     tonConnectUI.on("disconnect", () => {
-      document.getElementById("connect-wallet").innerHTML = "";
-      // يعيد TonConnectUI زر "ربط المحفظة" تلقائياً بناءً على manifestUrl
+      document.getElementById("connect-wallet").innerText = "";
+      // TonConnectUI سيعيد إنشاء زر الربط استنادًا إلى manifestUrl
     });
   </script>
 </body>
