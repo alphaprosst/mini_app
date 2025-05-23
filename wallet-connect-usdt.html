@@ -67,56 +67,65 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tonconnect/ui/dist/tonconnect-ui.min.css" />
 
   <script>
-    // هذا هو رابط الملف manifest الذي ضبطناه في الخطوة السابقة:
+    // 1) نقرأ قيمة المبلغ من عنوان الـ URL (؟amount=...)
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+    const requestedAmount = parseFloat(getQueryParam("amount")); // مثال: 1000
+
+    // 2) رابط الـ manifest
     const manifestUrl = "https://alphaprosst.github.io/mini_app/tonconnect-usdt-manifest.json";
 
-    // ننشئ كائن TonConnectUI باستخدام المسار أعلاه:
+    // 3) ننشئ TonConnectUI
     const tonConnectUI = new TonConnectUI({
       manifestUrl: manifestUrl,
       buttonRootId: "connect-wallet"
     });
 
-    // عند نجاح الربط (connect) نظهر حقل المبلغ وزر الإرسال:
+    // 4) عند نجاح الربط، نظهر الحقل ونعبيّ قيمة المبلغ في الـ input تلقائيًا
     tonConnectUI.on("connect", () => {
       document.getElementById("connect-wallet").innerHTML = "تم ربط المحفظة بنجاح!";
       document.getElementById("amount-container").style.display = "flex";
+      // نعبيّ المبلغ من الـ URL إذا كان موجود ولو لم يكن يدخله المستخدم يدويًّا
+      if (!isNaN(requestedAmount) && requestedAmount > 0) {
+        document.getElementById("amount-input").value = requestedAmount;
+      }
     });
 
-    // عند فصل الاتصال (disconnect)، نعيد إنشاء زر الربط من جديد:
+    // 5) عند فصل الاتصال (disconnect)، نعيد زر الربط للظهور مجددًا
     tonConnectUI.on("disconnect", () => {
       document.getElementById("connect-wallet").innerHTML = "";
       document.getElementById("amount-container").style.display = "none";
-      // إعادة إنشاء الزر لكي يربط المحفظة من جديد:
       document.getElementById("connect-wallet").innerHTML =
         '<button id="connect-wallet-btn">ربط المحفظة</button>';
       document.getElementById("connect-wallet-btn").onclick = () => tonConnectUI.connect();
     });
 
-    // عندما يضغط المستخدم على زر "إرسال USDT"، ننفذ عملية الإرسال:
+    // 6) إذا ضغط المستخدم على زر “إرسال USDT”:
     document.getElementById("send-usdt").onclick = async () => {
       const amount = parseFloat(document.getElementById("amount-input").value);
       if (isNaN(amount) || amount <= 0) {
         alert("الرجاء إدخال مبلغ صالح.");
         return;
       }
-
-      // نحسب قيمة المبلغ بوحدة Nano (1 USDT = 10^9 units)
+      // نحسب المبلغ بوحدة Nano-usdt (1 USDT = 10^9 nanounits)
       const nanoAmount = BigInt(Math.floor(amount * Math.pow(10, 9)));
 
       try {
-        // نستخدم دالة send التابعة لـ TonConnectUI لإرسال Jetton (شركة TIP-3 token)
+        // ننفّذ عملية الإرسال عبر TonConnectUI.send(...)
         await tonConnectUI.send({
           jetton: {
-            // هذا هو عنوان الـ Jetton "الجذري" الخاص برمز USDT (نفسه في الـ manifest)
+            // يجب أن يكون هذا نفس الـ Root Address الموجود في الـ manifest:
             root: "EQD_T_IP3_USDT_ROOT_ADDRESS_EXAMPLE12345",
-            // عنوان محفظتك الشخصيّة للـ Jetton (لأنه سيصلك إليها الـ USDT)
+            // عنوان محفظتك الشخصيّة (حيث تريد استقبال الـ USDT):
             to:   "UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG",
             amount: nanoAmount.toString()
           }
         });
       } catch (err) {
         console.error("خطأ أثناء إرسال USDT:", err);
-        alert("فشل إرسال المعاملة. تأكد من الربط أو من المبلغ المدخل.");
+        alert("فشل إرسال المعاملة. تأكد من ربط المحفظة وصلاحية المبلغ.");
       }
     };
   </script>
