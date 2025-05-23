@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>الجمل للاستثمار</title>
-  <!-- TonConnectUI CSS -->
+  <!-- رابط مكتبة TonConnectUI -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tonconnect/ui/dist/tonconnect-ui.min.css" />
   <style>
     /* -------------- Reset عام -------------- */
@@ -245,7 +245,7 @@
     .camel-image {
       position: fixed;
       top: 10px;
-      right: 10px; /* تم تغيير المحاذاة إلى اليمين */
+      right: 10px; /* شعار الجمل على اليمين */
       width: 80px;
       height: 80px;
     }
@@ -258,10 +258,7 @@
       display: block;
     }
 
-    /* --------------
-
-قسم الإحالات والمحفظة --------------
-    */
+    /* -------------- قسم الإحالات والمحفظة -------------- */
     .info-box {
       background-color: #F8F8F8;
       padding: 16px;
@@ -284,7 +281,7 @@
   <div id="app" class="main">
     <!-- هيدر الشعار وزر ربط المحفظة -->
     <div class="header">
-      <!-- TonConnectUI سيضع زر الربط هنا تلقائيًا -->
+      <!-- TonConnectUI سيُدرج زر الربط هنا تلقائيًا -->
       <div id="connect-wallet"></div>
       <!-- شعار الجمل على اليمين -->
       <img src="logo.png" alt="logo" />
@@ -395,7 +392,7 @@
   <!-- TonConnectUI JS -->
   <script src="https://cdn.jsdelivr.net/npm/@tonconnect/ui/dist/tonconnect-ui.min.js"></script>
   <script>
-    // ======== إعداد TonConnectUI للربط وإرسال المعاملات ========
+    // ======== إعداد TonConnectUI لــ USDT على TON ========
     const manifestUrl = "https://alphaprosst.github.io/mini_app/tonconnect-usdt-manifest.json";
     const tonConnectUI = new TonConnectUI({
       manifestUrl: manifestUrl,
@@ -403,12 +400,12 @@
     });
 
     // ======== عناوين الاستقبال ========
-    // عنوان TIP-3 (Jetton) لعملة USDT على شبكة TON
-    const USDT_TON_JETTON_ADDRESS = "EQCOXQ97FsPxmUJrmeKIZUrQMCKA3NnhTYeqt2s3-v83twxW";
-    // عنوان master (jetton master) لعملة USDT – يستقبل المبالغ
-    const USDT_TON_MASTER_ADDRESS = "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs";
-    // عنوان TON-native (لإرسال TON مباشرة إلى Tonkeeper)
-    const TON_RECEIVER_ADDRESS = "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs";
+    // عنوان Jetton Wallet الخاص باستقبال USDT على TON
+    const USDT_TON_WALLET_ADDRESS = "EQCOXQ97FsPxmUJrmeKIZUrQMCKA3NnhTYeqt2s3-v83twxW";
+    // عنوان Jetton Master لـ USDT على TON
+    const USDT_TON_JETTON_MASTER = "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs";
+    // عنوان TON-native (لإرسال TON مباشرة إلى TONkeeper)
+    const TON_RECEIVER_ADDRESS = "UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG";
 
     // عند انتهاء شاشة البداية إظهار الواجهة
     window.addEventListener("load", () => {
@@ -451,15 +448,20 @@
       }
     };
 
-    let selectedFund = "";      // صندوق المستخدم اختاره للاستثمار
+    let selectedFund = "";      // صندوق المستخدم حدد للاستثمار
     let selectedCurrency = "";  // العملة التي اختارها المستخدم: "ton" أو "usdtTon"
 
     // فتح المودال وتحديد الصندوق الذي ضغط عليه المستخدم
     function openInvestmentModal(fundName) {
       selectedFund = fundName;
+      // تعديل عنوان المودال
       document.getElementById("modalTitle").innerText = `استثمار في ${fundName}`;
+
+      // تحديث نص الحد الأدنى لكل خيار
       document.getElementById("tonMinLabel").innerText = `${fundData[fundName].tonMin} TON`;
       document.getElementById("usdtTonMinLabel").innerText = `${fundData[fundName].usdtTonMin} USDT`;
+
+      // إظهار خيارات الدفع (TON أو USDT على شبكة TON)
       document.getElementById("paymentOptions").style.display = "flex";
       document.getElementById("amountInputContainer").style.display = "none";
       document.getElementById("modal").style.display = "flex";
@@ -470,60 +472,83 @@
       document.getElementById("modal").style.display = "none";
     }
 
-    // عند اختيار طريقة الدفع
+    // عند اختيار طريقة الدفع (TON أو USDT على شبكة TON)
     function selectPayment(currency) {
       selectedCurrency = currency;
       const amountInput = document.getElementById("amountInput");
       let minVal = 0;
+
       if (currency === "ton") {
         minVal = fundData[selectedFund].tonMin;
       } else if (currency === "usdtTon") {
         minVal = fundData[selectedFund].usdtTonMin;
       }
+
       amountInput.value = minVal;
       amountInput.setAttribute("min", minVal);
+
+      // إظهار حقل إدخال المبلغ بعد اختيار العملة
       document.getElementById("paymentOptions").style.display = "none";
       document.getElementById("amountInputContainer").style.display = "flex";
     }
 
-    // تأكيد الدفع: نستخدم deeplink مباشرةً لفتح Tonkeeper
-    function confirmPayment() {
+    // تأكيد الدفع: إرسال TON-native أو USDT-jetton إلى Tonkeeper
+    async function confirmPayment() {
       const amount = parseFloat(document.getElementById("amountInput").value);
+      let minVal = 0;
+
       if (selectedCurrency === "ton") {
-        const minVal = fundData[selectedFund].tonMin;
+        minVal = fundData[selectedFund].tonMin;
         if (isNaN(amount) || amount < minVal) {
           alert(`الحد الأدنى للاستثمار في ${selectedFund} هو ${minVal} TON`);
           return;
         }
-        // نعوّض إلى nanotons (1 TON = 10^9 nanotons)
+        // تحويل TON إلى نانوتون (1 TON = 10^9 nanotons)
         const nano = (amount * Math.pow(10, 9)).toFixed(0);
-        // رابط deeplink لطاقية TON في Tonkeeper
-        const tonLink = `https://app.tonkeeper.com/transfer/${TON_RECEIVER_ADDRESS}?amount=${nano}`;
-        window.open(tonLink, "_blank");
+        try {
+          await tonConnectUI.send({
+            to: TON_RECEIVER_ADDRESS,
+            amount: nano
+          });
+        } catch (err) {
+          console.error("خطأ أثناء إرسال TON:", err);
+          alert("فشل إرسال معاملة TON. تأكد من الربط والمبلغ.");
+        }
+
       } else if (selectedCurrency === "usdtTon") {
-        const minVal = fundData[selectedFund].usdtTonMin;
+        minVal = fundData[selectedFund].usdtTonMin;
         if (isNaN(amount) || amount < minVal) {
           alert(`الحد الأدنى للاستثمار في ${selectedFund} هو ${minVal} USDT`);
           return;
         }
-        // نجمّع إلى nanounits للـ Jetton (1 USDT = 10^9 nanounits)
+        // تحويل USDT إلى نانو وحدات (1 USDT = 10^9 nanounits في TIP-3)
         const nano = Math.floor(amount * Math.pow(10, 9));
-        // رابط deeplink لطاقية Jetton USDT في Tonkeeper
-        const jettonLink = `https://app.tonkeeper.com/transfer/${USDT_TON_MASTER_ADDRESS}?jetton=${USDT_TON_JETTON_ADDRESS}&amount=${nano}`;
-        window.open(jettonLink, "_blank");
+        try {
+          await tonConnectUI.send({
+            jetton: {
+              address: USDT_TON_JETTON_MASTER,
+              amount: nano
+            },
+            to: USDT_TON_WALLET_ADDRESS
+          });
+        } catch (err) {
+          console.error("خطأ أثناء إرسال USDT:", err);
+          alert("فشل إرسال معاملة USDT. تأكد من الربط والمبلغ.");
+        }
       }
+
       closeModal();
     }
 
-    // TonConnectUI: عرض رسالة بعد الربط الناجح
+    // عندما يتم الربط بنجاح، يظهر نص تأكيد
     tonConnectUI.on("connect", () => {
       document.getElementById("connect-wallet").innerText = "تم ربط المحفظة بنجاح!";
     });
 
-    // TonConnectUI: عند قطع الاتصال سيعيد الزر للعمل
+    // عند قطع الاتصال، يعيد TonConnectUI إظهار زر الربط تلقائيًا
     tonConnectUI.on("disconnect", () => {
       document.getElementById("connect-wallet").innerText = "";
-      // TonConnectUI سيعيد إنشاء الزر تلقائيًا اعتمادًا على manifestUrl
+      // TonConnectUI سيعيد إنشاء زر الربط استنادًا إلى manifestUrl
     });
   </script>
 </body>
