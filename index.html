@@ -2,271 +2,134 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>الجمل للاستثمار</title>
   <style>
-    /* -------------- Reset عام -------------- */
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Arial', sans-serif;
+      margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif;
     }
     body {
-      background-color: #00C569; /* أخضر فاتح مثل شعار الجمل */
-    }
-
-    /* -------------- شاشة البداية (Splash) -------------- */
-    #splash {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
       background-color: #00C569;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+    }
+    #splash {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background-color: #00C569;
+      display: flex; justify-content: center; align-items: center; z-index: 1000;
     }
     #splash img {
-      width: 150px;
-      height: 150px;
+      width: 150px; height: 150px;
     }
-
-    /* -------------- الواجهة الرئيسية (Main Content) -------------- */
     .main {
-      display: none; /* تظهر بعد انتهاء Splash */
-      background-color: #ffffff;
-      min-height: 100vh;
-      position: relative;
-      padding-bottom: 60px; /* مساحة لشريط التنقل السفلي */
+      display: none; background-color: #fff; min-height: 100vh; position: relative; padding-bottom: 60px;
     }
-
-    /* -------------- الهيدر: شعار الجمل على اليسار -------------- */
     .header {
-      background-color: #ffffff;
-      display: flex;
-      justify-content: flex-start; /* الشعار على اليسار في العربية */
-      align-items: center;
-      padding: 12px 20px;
-      border-bottom: 1px solid #ddd;
+      background-color: #fff; display: flex; justify-content: flex-start; align-items: center; padding: 12px 20px; border-bottom: 1px solid #ddd;
     }
     .header img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
+      width: 50px; height: 50px; border-radius: 50%;
     }
-
-    /* -------------- الحاوية العامة -------------- */
     .container {
       padding: 16px 20px;
     }
-
-    /* -------------- بطاقات الصناديق -------------- */
     .fund {
-      background-color: #F8F8F8;
-      margin-bottom: 16px;
-      border-radius: 12px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      padding: 12px;
-      transition: transform 0.2s ease;
+      background-color: #F8F8F8; margin-bottom: 16px; border-radius: 12px; box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      display: flex; flex-direction: column; padding: 12px; transition: transform 0.2s ease;
     }
     .fund:hover {
       transform: scale(1.02);
     }
     .fund-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: flex; justify-content: space-between; align-items: center;
     }
     .fund-name {
-      font-size: 18px;
-      font-weight: bold;
-      color: #333;
+      font-size: 18px; font-weight: bold; color: #333;
     }
     .fund-growth {
-      display: flex;
-      align-items: center;
-      font-size: 16px;
-      color: green;
-      font-weight: bold;
+      display: flex; align-items: center; font-size: 16px; color: green; font-weight: bold;
     }
     .fund-growth::before {
-      content: '↑'; 
-      margin-left: 6px;
-      font-size: 20px;
+      content: '↑'; margin-left: 6px; font-size: 20px;
     }
     .fund-desc {
-      margin-top: 8px;
-      font-size: 14px;
-      color: #555;
-      line-height: 1.6;
+      margin-top: 8px; font-size: 14px; color: #555; line-height: 1.6;
     }
     .invest-btn {
-      margin-top: 10px;
-      background-color: #00C569;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
+      margin-top: 10px; background-color: #00C569; color: #fff; border: none; border-radius: 8px; padding: 10px; font-size: 16px; cursor: pointer; transition: background-color 0.2s ease;
     }
     .invest-btn:hover {
       background-color: #0ba158;
     }
-
-    /* -------------- صندوق إدخال المبلغ (Modal + خيارات الدفع) -------------- */
     .modal {
-      display: none;
-      position: fixed;
-      bottom: 60px; /* فوق شريط التنقل السفلي */
-      left: 0; right: 0;
-      background-color: rgba(0,0,0,0.5);
-      height: calc(100vh - 60px);
-      justify-content: center;
-      align-items: center;
-      z-index: 1001;
+      display: none; position: fixed; bottom: 60px; left: 0; right: 0;
+      background-color: rgba(0,0,0,0.5); height: calc(100vh - 60px);
+      justify-content: center; align-items: center; z-index: 1001;
     }
     .modal-content {
-      background-color: #fff;
-      width: 90%;
-      max-width: 400px;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      background-color: #fff; width: 90%; max-width: 400px; border-radius: 12px; padding: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     .modal-content h3 {
-      margin-bottom: 12px;
-      font-size: 20px;
-      color: #333;
+      margin-bottom: 12px; font-size: 20px; color: #333;
     }
     .payment-options {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 16px;
+      display: flex; flex-direction: column; margin-bottom: 16px;
     }
     .payment-option {
-      background-color: #F8F8F8;
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background-color: #F8F8F8; padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer;
+      font-size: 16px; display: flex; justify-content: space-between; align-items: center;
     }
     .payment-option:hover {
       background-color: #eee;
     }
     .payment-option span {
-      font-weight: bold;
-      color: #006C3F;
+      font-weight: bold; color: #006C3F;
     }
     .amount-input {
-      display: none;
-      flex-direction: column;
+      display: none; flex-direction: column;
     }
     .amount-input input {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-bottom: 16px;
+      width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 16px;
     }
     .amount-input .buy-now {
-      background-color: #00C569;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      width: 100%;
-      padding: 12px;
-      font-size: 18px;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
+      background-color: #00C569; color: #fff; border: none; border-radius: 8px; width: 100%; padding: 12px; font-size: 18px; cursor: pointer; transition: background-color 0.2s ease;
     }
     .amount-input .buy-now:hover {
       background-color: #0ba158;
     }
-
-    /* -------------- قائمة الأزرار السفلية -------------- */
     .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0; right: 0;
-      height: 60px;
-      background-color: #ffffff;
-      border-top: 1px solid #ccc;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 1000;
+      position: fixed; bottom: 0; left: 0; right: 0; height: 60px;
+      background-color: #fff; border-top: 1px solid #ccc; display: flex; justify-content: space-around; align-items: center; z-index: 1000;
     }
     .bottom-nav div {
-      text-align: center;
-      font-size: 14px;
-      color: #006C3F;
-      cursor: pointer;
+      text-align: center; font-size: 14px; color: #006C3F; cursor: pointer;
     }
     .bottom-nav .active {
-      color: #00C569;
-      font-weight: bold;
+      color: #00C569; font-weight: bold;
     }
-
-    /* -------------- صورة الجمل -------------- */
     .camel-image {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      width: 80px;
-      height: 80px;
+      position: fixed; top: 10px; right: 10px; width: 80px; height: 80px;
     }
-
-    /* -------------- الأقسام المخفية (Tabs) -------------- */
     .section {
       display: none;
     }
     .section.active {
       display: block;
     }
-
-    /* -------------- قسم الإحالات والمحفظة -------------- */
     .info-box {
-      background-color: #F8F8F8;
-      padding: 16px;
-      border-radius: 10px;
-      margin-bottom: 16px;
-      font-size: 18px;
-      color: #333;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background-color: #F8F8F8; padding: 16px; border-radius: 10px; margin-bottom: 16px; font-size: 18px; color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
-
-  <!-- صورة الجمل -->
   <img class="camel-image" src="logo.png" alt="جمل للاستثمار" />
-
-  <!-- شاشة البداية -->
   <div id="splash" class="splash">
     <img src="logo.png" alt="logo" />
   </div>
-
-  <!-- الواجهة الرئيسية -->
   <div id="app" class="main">
-    <!-- هيدر الشعار -->
     <div class="header">
       <img src="logo.png" alt="logo" />
     </div>
-
-    <!-- القسم: الصناديق -->
     <div id="fundsSection" class="section active">
       <div class="container">
-        <!-- صندوق BBTC -->
         <div class="fund">
           <div class="fund-header">
             <div class="fund-name">BBTC</div>
@@ -277,8 +140,6 @@
           </div>
           <button class="invest-btn" onclick="openInvestmentModal('BBTC')">استثمار</button>
         </div>
-
-        <!-- صندوق CFUND -->
         <div class="fund">
           <div class="fund-header">
             <div class="fund-name">CFUND</div>
@@ -289,8 +150,104 @@
           </div>
           <button class="invest-btn" onclick="openInvestmentModal('CFUND')">استثمار</button>
         </div>
-
-        <!-- صندوق GPOOL -->
         <div class="fund">
           <div class="fund-header">
-            <div class="fund-name">GPOOL
+            <div class="fund-name">GPOOL</div>
+            <div class="fund-growth">100%</div>
+          </div>
+          <div class="fund-desc">
+            يتمتع مستثمرون هذا الصندوق بخليط من الاستثمارات القوية لتحقيق أرباح عالية شهرياً. يستثمر في العملات الرقمية، الاكتتابات المبكرة، عملات الميم، والعقود الآجلة. نسبة الخسارة المتوقعة في أسوأ الحالات لا تتجاوز 5%.
+          </div>
+          <button class="invest-btn" onclick="openInvestmentModal('GPOOL')">استثمار</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- مودال الاستثمار -->
+    <div id="investmentModal" class="modal" onclick="closeModal(event)">
+      <div class="modal-content" onclick="event.stopPropagation()">
+        <h3>اختر طريقة الدفع</h3>
+        <div class="payment-options">
+          <div class="payment-option" onclick="selectPayment('TON')">
+            <span>TON - محفظة Tonkeeper</span>
+          </div>
+          <div class="payment-option" onclick="selectPayment('USDT_TON')">
+            <span>USDT على شبكة TON - محفظة Tonkeeper</span>
+          </div>
+        </div>
+
+        <div id="amountInput" class="amount-input">
+          <input type="number" id="amount" placeholder="أدخل المبلغ بالعملة المختارة" min="1" />
+          <button class="buy-now" onclick="buyNow()">شراء الآن</button>
+          <p id="walletAddress" style="word-break: break-all; margin-top:10px; color:#006C3F; font-weight:bold;"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="active">الرئيسية</div>
+      <div>المحفظة</div>
+      <div>الإحالات</div>
+      <div>الملف الشخصي</div>
+    </div>
+  </div>
+
+  <script>
+    // عرض الشاشة الترحيبية ثم إظهار المحتوى الرئيسي
+    window.onload = () => {
+      setTimeout(() => {
+        document.getElementById('splash').style.display = 'none';
+        document.querySelector('.main').style.display = 'block';
+      }, 2000);
+    };
+
+    let selectedFund = '';
+    let selectedPayment = '';
+
+    function openInvestmentModal(fund) {
+      selectedFund = fund;
+      selectedPayment = '';
+      document.getElementById('amountInput').style.display = 'none';
+      document.getElementById('walletAddress').textContent = '';
+      document.getElementById('amount').value = '';
+      document.getElementById('investmentModal').style.display = 'flex';
+    }
+
+    function closeModal(e) {
+      if (e.target.id === 'investmentModal') {
+        document.getElementById('investmentModal').style.display = 'none';
+      }
+    }
+
+    function selectPayment(payment) {
+      selectedPayment = payment;
+      document.getElementById('amountInput').style.display = 'flex';
+      document.getElementById('walletAddress').textContent = getWalletAddress(payment);
+    }
+
+    function getWalletAddress(payment) {
+      if (payment === 'TON') {
+        return 'محفظة TON الخاصة بـ Tonkeeper'; // يمكن تحط هنا عنوان TON الخاص بك إذا تريد
+      } else if (payment === 'USDT_TON') {
+        // عنوان USDT على شبكة TON اللي أعطيتني
+        return 'UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG';
+      }
+      return '';
+    }
+
+    function buyNow() {
+      const amount = document.getElementById('amount').value;
+      if (!amount || amount <= 0) {
+        alert('الرجاء إدخال مبلغ صحيح.');
+        return;
+      }
+      if (!selectedPayment) {
+        alert('الرجاء اختيار طريقة الدفع.');
+        return;
+      }
+      alert(`شكراً لاستثمارك في صندوق ${selectedFund} بمبلغ ${amount} باستخدام طريقة الدفع ${selectedPayment}.\n\nيرجى إرسال المبلغ إلى العنوان التالي:\n${getWalletAddress(selectedPayment)}`);
+      document.getElementById('investmentModal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
