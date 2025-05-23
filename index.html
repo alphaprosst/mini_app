@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="اربية" dir="rtl">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -45,7 +45,7 @@
     .header {
       background-color: #ffffff;
       display: flex;
-      justify-content: flex-end; /* الشعار على اليمين في العربية */
+      justify-content: flex-end; /* الشعار على اليمين */
       align-items: center;
       padding: 12px 20px;
       border-bottom: 1px solid #ddd;
@@ -360,7 +360,7 @@
           <span>TON (Tonkeeper)</span>
           <span id="tonMinLabel">حد أدنى</span>
         </div>
-        <!-- خيار دفع USDT عبر شبكة TON (Deep Link Tonkeeper) -->
+        <!-- خيار دفع USDT عبر شبكة TON (نحو صفحة ربطة وإرسال) -->
         <div class="payment-option" onclick="selectPayment('usdtTon')">
           <span>USDT (شبكة TON)</span>
           <span id="usdtTonMinLabel">حد أدنى</span>
@@ -385,10 +385,77 @@
 
   <!-- جافاسكربت لتشغيل الأقسام والـ Modal وخيارات الدفع -->
   <script>
-    // ربط محافظك الحقيقية هنا:
-    const TONKEEPER_BASE = "ton://transfer/UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG?amount=";
-    // لاحظ: عنوان USDT على شبكة TON (TIP-3) خاصتك
-    const USDT_TON_WALLET_ADDRESS = "UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG"; 
+    // بيانات الصناديق والحدود الدنيا بالعملات المختلفة
+    const fundData = {
+      "BBTC": { usdtTonMin: 1000, tonMin: 333 },
+      "CFUND": { usdtTonMin: 500, tonMin: 166 },
+      "GPOOL": { usdtTonMin: 500, tonMin: 166 }
+    };
+
+    let selectedFund = "";      // صندوق المستخدم حدد للاستثمار
+    let selectedCurrency = "";  // العملة التي اختارها المستخدم: "ton" أو "usdtTon"
+
+    // فتح المودال وتحديد الصندوق الذي ضغط عليه المستخدم
+    function openInvestmentModal(fundName) {
+      selectedFund = fundName;
+      document.getElementById("modalTitle").innerText = `استثمار في ${fundName}`;
+      document.getElementById("tonMinLabel").innerText = `${fundData[fundName].tonMin} TON`;
+      document.getElementById("usdtTonMinLabel").innerText = `${fundData[fundName].usdtTonMin} USDT`;
+      document.getElementById("paymentOptions").style.display = "flex";
+      document.getElementById("amountInputContainer").style.display = "none";
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    // إغلاق المودال
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    // عند اختيار طريقة الدفع (TON أو USDT على شبكة TON)
+    function selectPayment(currency) {
+      selectedCurrency = currency;
+      const amountInput = document.getElementById("amountInput");
+      let minVal = 0;
+      if (currency === "ton") {
+        minVal = fundData[selectedFund].tonMin;
+      } else if (currency === "usdtTon") {
+        minVal = fundData[selectedFund].usdtTonMin;
+      }
+      amountInput.value = minVal;
+      amountInput.setAttribute("min", minVal);
+      document.getElementById("paymentOptions").style.display = "none";
+      document.getElementById("amountInputContainer").style.display = "flex";
+    }
+
+    // تأكيد الشراء وفتح الرابط المناسب
+    function confirmPayment() {
+      const amount = parseFloat(document.getElementById("amountInput").value);
+      let minVal = 0;
+      if (selectedCurrency === "ton") {
+        minVal = fundData[selectedFund].tonMin;
+        if (isNaN(amount) || amount < minVal) {
+          alert(`الحد الأدنى للاستثمار في ${selectedFund} هو ${minVal} TON`);
+          return;
+        }
+        // نرسل TON (بالنانوتون) مباشرة عبر deep link:
+        const nano = (amount * Math.pow(10, 9)).toFixed(0);
+        const TONKEEPER_BASE = "ton://transfer/UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG?amount=";
+        window.open(TONKEEPER_BASE + nano, "_blank");
+        closeModal();
+      }
+      else if (selectedCurrency === "usdtTon") {
+        minVal = fundData[selectedFund].usdtTonMin;
+        if (isNaN(amount) || amount < minVal) {
+          alert(`الحد الأدنى للاستثمار في ${selectedFund} هو ${minVal} USDT`);
+          return;
+        }
+        // بدلاً من deep link لـ TON، نوجّه المستخدم إلى صفحة wallet-connect-usdt.html
+        // مع تمرير المبلغ كـ query parameter:
+        window.location.href = `wallet-connect-usdt.html?amount=${amount}`;
+        // لا ننسى إلغاء فتح الـ modal هنا (لأنّنا نعيد التوجيه للصفحة الجديدة)
+        closeModal();
+      }
+    }
 
     // عند انتهاء شاشة البداية إظهار الواجهة
     window.addEventListener("load", () => {
@@ -413,99 +480,6 @@
         document.getElementById("tabWallet").classList.add("active");
         document.getElementById("walletSection").classList.add("active");
       }
-    }
-
-    // بيانات الصناديق والحدود الدنيا بالعملات المختلفة
-    const fundData = {
-      "BBTC": {
-        usdtTonMin: 1000,  // كان usdtMin سابقًا بالـ BEP20 → الآن نستخدم شبكة TON
-        tonMin: 333
-      },
-      "CFUND": {
-        usdtTonMin: 500,
-        tonMin: 166
-      },
-      "GPOOL": {
-        usdtTonMin: 500,
-        tonMin: 166
-      }
-    };
-
-    let selectedFund = "";      // صندوق المستخدم حدد للاستثمار
-    let selectedCurrency = "";  // العملة التي اختارها المستخدم: "ton" أو "usdtTon"
-
-    // فتح المودال وتحديد الصندوق الذي ضغط عليه المستخدم
-    function openInvestmentModal(fundName) {
-      selectedFund = fundName;
-      // تعديل عنوان المودال
-      document.getElementById("modalTitle").innerText = `استثمار في ${fundName}`;
-
-      // تحديث نص الحد الأدنى لكل خيار
-      document.getElementById("tonMinLabel").innerText = `${fundData[fundName].tonMin} TON`;
-      document.getElementById("usdtTonMinLabel").innerText = `${fundData[fundName].usdtTonMin} USDT`;
-
-      // إظهار خيارات الدفع (TON أو USDT على شبكة TON)
-      document.getElementById("paymentOptions").style.display = "flex";
-      document.getElementById("amountInputContainer").style.display = "none";
-      document.getElementById("modal").style.display = "flex";
-    }
-
-    // إغلاق المودال
-    function closeModal() {
-      document.getElementById("modal").style.display = "none";
-    }
-
-    // عند اختيار طريقة الدفع (TON أو USDT على شبكة TON)
-    function selectPayment(currency) {
-      selectedCurrency = currency;
-      const amountInput = document.getElementById("amountInput");
-      let minVal = 0;
-
-      if (currency === "ton") {
-        minVal = fundData[selectedFund].tonMin;
-      } else if (currency === "usdtTon") {
-        minVal = fundData[selectedFund].usdtTonMin;
-      }
-
-      amountInput.value = minVal;
-      amountInput.setAttribute("min", minVal);
-
-      // إظهار حقل إدخال المبلغ بعد اختيار العملة
-      document.getElementById("paymentOptions").style.display = "none";
-      document.getElementById("amountInputContainer").style.display = "flex";
-    }
-
-    // تأكيد الشراء وفتح الرابط المناسب لمحفظة المستخدم
-    function confirmPayment() {
-      const amount = parseFloat(document.getElementById("amountInput").value);
-      let minVal = 0;
-      let url = "#";
-
-      if (selectedCurrency === "ton") {
-        minVal = fundData[selectedFund].tonMin;
-        if (isNaN(amount) || amount < minVal) {
-          alert(`الحد الأدنى للاستثمار في ${selectedFund} هو ${minVal} TON`);
-          return;
-        }
-        // نرسل TON (بالنانوتون)
-        const nano = (amount * Math.pow(10, 9)).toFixed(0);
-        url = TONKEEPER_BASE + nano;
-
-      } else if (selectedCurrency === "usdtTon") {
-        minVal = fundData[selectedFund].usdtTonMin;
-        if (isNaN(amount) || amount < minVal) {
-          alert(`الحد الأدنى للاستثمار في ${selectedFund} هو ${minVal} USDT`);
-          return;
-        }
-        // نرسل USDT على شبكة TON (TIP-3)
-        const nano = Math.floor(amount * Math.pow(10, 9));
-        // رابط معاملة Deep Link إلى Tonkeeper لإرسال USDT
-        url = `tonkeeper://transfer/${USDT_TON_WALLET_ADDRESS}?amount=${nano}`;
-      }
-
-      // نفتح الرابط في نافذة جديدة ليظهر في محفظة Tonkeeper
-      window.open(url, "_blank");
-      closeModal();
     }
   </script>
 </body>
