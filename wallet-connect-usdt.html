@@ -67,33 +67,32 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tonconnect/ui/dist/tonconnect-ui.min.css" />
 
   <script>
-    // 1) نقرأ قيمة المبلغ من عنوان الـ URL (؟amount=...)
+    // دالة لقراءة الـ query parameter من عنوان URL
     function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(name);
     }
-    const requestedAmount = parseFloat(getQueryParam("amount")); // مثال: 1000
+    const requestedAmount = parseFloat(getQueryParam("amount")) || 0;
 
-    // 2) رابط الـ manifest
+    // رابط الـ manifest الخاص بإرسال الـ USDT على شبكة TON
     const manifestUrl = "https://alphaprosst.github.io/mini_app/tonconnect-usdt-manifest.json";
 
-    // 3) ننشئ TonConnectUI
+    // إعداد TonConnectUI
     const tonConnectUI = new TonConnectUI({
       manifestUrl: manifestUrl,
       buttonRootId: "connect-wallet"
     });
 
-    // 4) عند نجاح الربط، نظهر الحقل ونعبيّ قيمة المبلغ في الـ input تلقائيًا
+    // عند نجاح الربط، نُظهر حقل المبلغ ونعبيّ القيمة تلقائيًا
     tonConnectUI.on("connect", () => {
       document.getElementById("connect-wallet").innerHTML = "تم ربط المحفظة بنجاح!";
       document.getElementById("amount-container").style.display = "flex";
-      // نعبيّ المبلغ من الـ URL إذا كان موجود ولو لم يكن يدخله المستخدم يدويًّا
       if (!isNaN(requestedAmount) && requestedAmount > 0) {
         document.getElementById("amount-input").value = requestedAmount;
       }
     });
 
-    // 5) عند فصل الاتصال (disconnect)، نعيد زر الربط للظهور مجددًا
+    // عند فصل الاتصال، نعيد الزر للظهور مجددًا
     tonConnectUI.on("disconnect", () => {
       document.getElementById("connect-wallet").innerHTML = "";
       document.getElementById("amount-container").style.display = "none";
@@ -102,24 +101,25 @@
       document.getElementById("connect-wallet-btn").onclick = () => tonConnectUI.connect();
     });
 
-    // 6) إذا ضغط المستخدم على زر “إرسال USDT”:
+    // إذا ضغط المستخدم على زر “إرسال USDT”
     document.getElementById("send-usdt").onclick = async () => {
       const amount = parseFloat(document.getElementById("amount-input").value);
       if (isNaN(amount) || amount <= 0) {
         alert("الرجاء إدخال مبلغ صالح.");
         return;
       }
-      // نحسب المبلغ بوحدة Nano-usdt (1 USDT = 10^9 nanounits)
+      // نحسب المبلغ بوحدة Nano-USDT (1 USDT = 10^9 nanounits)
       const nanoAmount = BigInt(Math.floor(amount * Math.pow(10, 9)));
 
       try {
-        // ننفّذ عملية الإرسال عبر TonConnectUI.send(...)
+        // ننشئ طلب إرسال Jetton USDT (TIP-3)
         await tonConnectUI.send({
           jetton: {
-            // يجب أن يكون هذا نفس الـ Root Address الموجود في الـ manifest:
+            // 1) هذا هو Jetton Root Address الخاص بالـ USDT (يجب مطابقته لـ manifest)
             root: "EQD_T_IP3_USDT_ROOT_ADDRESS_EXAMPLE12345",
-            // عنوان محفظتك الشخصيّة (حيث تريد استقبال الـ USDT):
+            // 2) عنوان محفظتك الشخصيّة التي ستستقبل الـ USDT
             to:   "UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG",
+            // 3) المبلغ بنانُونِيت (string)
             amount: nanoAmount.toString()
           }
         });
