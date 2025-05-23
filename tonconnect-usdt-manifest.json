@@ -5,9 +5,9 @@
   "pairs": [
     {
       "jetton": {
-        // ✘ هنا كان عنوان المحفظة؛ يجب أن يكون عنوان الـ Jetton "الجذري" (root) لـ USDT على شبكة TON:
-        //    مثلاً (مثال افتراضي – يحتاج أن تستبدله بـ Root Address الفعلي لرمز USDT TIP-3):
-        "address": "EQD_T_IP3_USDT_ROOT_ADDRESS_EXAMPLE12345",  
+        // ✘ لا تستخدم عنوان المحفظة الشخصية هنا! 
+        // يجب أن يكون Root Address الخاص برمز USDT (TIP-3) على شبكة TON:
+        "address": "EQD_T_IP3_USDT_ROOT_ADDRESS_EXAMPLE12345",
         "decimals": 9,
         "symbol": "USDT"
       }
