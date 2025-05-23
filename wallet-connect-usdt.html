@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ربط محفظة USDT على TON</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    h1 {
+      margin-bottom: 24px;
+      color: #006C3F;
+    }
+    #connect-wallet, #send-usdt {
+      margin: 16px 0;
+    }
+    button {
+      background-color: #00C569;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    button:hover {
+      background-color: #0ba158;
+    }
+    #amount-container {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #amount-input {
+      width: 120px;
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <h1>ربط المحفظة وإرسال USDT على TON</h1>
+
+  <!-- مكان زر ربط المحفظة -->
+  <div id="connect-wallet"></div>
+
+  <!-- حقل إدخال المبلغ وزر الإرسال (يظهر بعد الربط) -->
+  <div id="amount-container" style="display: none;">
+    <input type="number" id="amount-input" placeholder="المبلغ (USDT)" min="1" />
+    <button id="send-usdt">إرسال USDT</button>
+  </div>
+
+  <!-- تضمين مكتبة TonConnectUI -->
+  <script src="https://cdn.jsdelivr.net/npm/@tonconnect/ui/dist/tonconnect-ui.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tonconnect/ui/dist/tonconnect-ui.min.css" />
+
+  <script>
+    // نطاق الـ manifest الذي أنشأناه (ملف JSON)
+    const manifestUrl = "https://alphaprosst.github.io/mini_app/tonconnect-usdt-manifest.json";
+
+    // إنشاء واجهة TonConnectUI لربط المحفظة
+    const tonConnectUI = new TonConnectUI({
+      manifestUrl: manifestUrl,
+      buttonRootId: "connect-wallet"
+    });
+
+    // عند نجاح الربط، نظهر حقل إدخال المبلغ
+    tonConnectUI.on("connect", () => {
+      document.getElementById("connect-wallet").innerHTML = "تم ربط المحفظة بنجاح!";
+      document.getElementById("amount-container").style.display = "flex";
+    });
+
+    // عند فصل الاتصال، نعيد الزر للظهور من جديد
+    tonConnectUI.on("disconnect", () => {
+      document.getElementById("connect-wallet").innerHTML = "";
+      document.getElementById("connect-wallet").innerHTML = '<button id="connect-wallet-btn">ربط المحفظة</button>';
+      document.getElementById("amount-container").style.display = "none";
+      // نعيد تهيئة الحدث من جديد:
+      document.getElementById("connect-wallet-btn").onclick = () => tonConnectUI.connect();
+    });
+
+    // إذا ضغط المستخدم على زر "إرسال USDT"
+    document.getElementById("send-usdt").onclick = async () => {
+      const amount = parseFloat(document.getElementById("amount-input").value);
+      if (isNaN(amount) || amount <= 0) {
+        alert("الرجاء إدخال مبلغ صالح.");
+        return;
+      }
+
+      // ننشئ عملية الدفع باستخدام TonConnectSDK
+      try {
+        await tonConnectUI.send({
+          jetton: {
+            address: "UQDKLcbrOa3D7Cdm0NbsBJxI_UnNy9WpNGkPgh_pvbEU_kZG", 
+            amount: Math.floor(amount * Math.pow(10, 9)) // نحول USDT إلى نانو USDT
+          }
+        });
+      } catch (err) {
+        console.error("خطأ أثناء إرسال USDT:", err);
+        alert("فشل إرسال المعاملة. تأكد من الربط أو المبلغ.");
+      }
+    };
+  </script>
+</body>
+</html>
